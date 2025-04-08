@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import loginIcons from "../assets/signin.gif"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import imageTobase64 from '../helpers/imageTobase64'
+import summaryApi from '../common'
+import { toast } from 'react-toastify'
 
 const SignUp = () => {
   const [showPassword, SetShowPassword] = useState(false)
@@ -18,6 +20,8 @@ const SignUp = () => {
     }
   )
 
+  const navigate = useNavigate()
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setData((prev) => ({
@@ -26,9 +30,38 @@ const SignUp = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+
+    if (data.password === data.confirmPassword) {
+      const dataResponse = await fetch(summaryApi.signUp.url, {
+        method: summaryApi.signUp.method,
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify(data)
+      })
+
+      const dataApi = await dataResponse.json(); // <-- add await here
+
+      if (dataApi.success) {
+        toast.success(dataApi.message)
+        navigate("/login")
+      }
+      if (dataApi.error) {
+        toast.error(dataApi.message)
+      }
+
+
+      // toast(dataApi.message || "Signup response received");
+
+      // console.log('data', dataApi);
+
+    } else {
+      toast.error("Password and Confirm Password do not match");
+    }
   }
+
 
   const handleUploadPic = async (e) => {
     const file = e.target.files[0]

@@ -2,7 +2,9 @@ import React from 'react'
 import loginIcons from "../assets/signin.gif"
 import { FaEye, FaEyeSlash } from 'react-icons/fa'
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import summaryApi from '../common'
+import { toast } from 'react-toastify'
 const Login = () => {
   const [showPassword, SetShowPassword] = useState(false)
   const [data, setData] = useState(
@@ -12,6 +14,7 @@ const Login = () => {
       password: ""
     }
   )
+  const navigate = useNavigate()
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,8 +24,29 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
+
+    const dataResponse = await fetch(summaryApi.signIn.url, {
+      method: summaryApi.signIn.method, // should be "POST"
+      credentials: "include",           // 🔥 required for cookies
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    });
+
+
+    const dataApi = await dataResponse.json(); // <-- add await here
+
+    if (dataApi.success) {
+      toast.success(dataApi.message)
+      navigate("/")
+    }
+    if (dataApi.error) {
+      toast.error(dataApi.message)
+    }
+
   }
   console.log('data: ', data);
   return (
@@ -33,7 +57,7 @@ const Login = () => {
             <img src={loginIcons} alt='login icons' />
           </div>
           {/* login form */}
-          <form  className='pt-6 flex flex-col gap-2' onSubmit={handleSubmit}>
+          <form className='pt-6 flex flex-col gap-2' onSubmit={handleSubmit}>
             <div className='grid'>
               <label>Email Id:</label>
               <div className='bg-slate-100 p-2 flex '>
