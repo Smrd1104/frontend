@@ -9,8 +9,11 @@ import summaryApi from '../common'
 import { toast } from 'react-toastify'
 import { useDispatch } from 'react-redux'
 import { setUserDetails } from '../store/userSlice'
+import { useState } from 'react'
 
 const Header = () => {
+
+    const [menuDisplay, setMenuDisplay] = useState(false)
 
     const user = useSelector(state => state?.user?.user)
     const dispatch = useDispatch()
@@ -34,7 +37,7 @@ const Header = () => {
     console.log("user header", user)
     return (
         <header className='h-16 shadow-md bg-white'>
-            <div className='h-full flex items-center container mx-auto px-4 justify-between overflow-hidden'>
+            <div className='h-full flex items-center container mx-auto px-4 justify-between'>
                 {/* logo section */}
                 <div className=''>
                     <Link to={"/"}>
@@ -51,14 +54,29 @@ const Header = () => {
                 {/* cart and icons section */}
                 <div className='flex items-center gap-7'>
 
-                    <div className='text-3xl cursor-pointer'>
+                    <div className='relative  flex justify-center'>
+                        <div className='text-3xl cursor-pointer relative flex justify-center' onClick={() => setMenuDisplay(prev => !prev)}>
+                            {
+                                user?.profilePic ? (
+                                    <img src={user?.profilePic} alt={user?.name} className='w-10 h-10 rounded-full' />
+                                ) :
+                                    (
+                                        <FaRegCircleUser />
+                                    )
+                            }
+
+                        </div>
                         {
-                            user?.profilePic ? (
-                                <img src={user?.profilePic} alt={user?.name} className='w-10 h-10 rounded-full' />
-                            ) :
-                                (
-                                    <FaRegCircleUser />
-                                )
+                            menuDisplay &&
+                            (
+                                <div className='absolute bg-white bottom-0 top-11 p-2 h-fit shadow-lg rounded  '>
+                                    <nav>
+                                        <Link to={"admin-panel"} className='whitespace-nowrap hover:bg-slate-200 p-2' >
+                                            Admin panel
+                                        </Link>
+                                    </nav>
+                                </div>
+                            )
                         }
 
                     </div>
