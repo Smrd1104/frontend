@@ -13,6 +13,9 @@ export const userSlice = createSlice({
             state.user = action.payload;
 
             console.log("userDetails", action.payload);
+        },
+        logoutRedux: (state) => {
+            state.user = null
         }
     }
 });
