@@ -5,6 +5,8 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import summaryApi from '../common'
 import { toast } from 'react-toastify'
+import { useContext } from 'react'
+import context from '../context'
 const Login = () => {
   const [showPassword, SetShowPassword] = useState(false)
   const [data, setData] = useState(
@@ -15,6 +17,7 @@ const Login = () => {
     }
   )
   const navigate = useNavigate()
+  const { fetchUserDetails } = useContext(context)
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,6 +45,7 @@ const Login = () => {
     if (dataApi.success) {
       toast.success(dataApi.message)
       navigate("/")
+      fetchUserDetails()
     }
     if (dataApi.error) {
       toast.error(dataApi.message)
