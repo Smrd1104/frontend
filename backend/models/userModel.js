@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   },
   password: String,
   profilePic: String,
+  role: String
 }, {
   timestamps: true,
 });
