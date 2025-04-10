@@ -25,7 +25,7 @@ function App() {
       dispatch(setUserDetails(dataApi.data))
     }
 
-    console.log('data-user', dataApi);
+   
   }
   useEffect(() => {
     fetchUserDetails()

@@ -5,5 +5,20 @@ body {
 }
 
 .customShadow {
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.1);
+    @apply border-r-2 border-slate-200
+}
+
+/* user table */
+.userTable {
+
+    @apply bg-white
+}
+
+.userTable th {
+    @apply border border-slate-200 text-base font-medium
+}
+
+.userTable td {
+    @apply border border-slate-200 text-base text-center
 }

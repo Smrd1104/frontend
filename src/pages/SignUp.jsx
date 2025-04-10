@@ -52,11 +52,6 @@ const SignUp = () => {
         toast.error(dataApi.message)
       }
 
-
-      // toast(dataApi.message || "Signup response received");
-
-      // console.log('data', dataApi);
-
     } else {
       toast.error("Password and Confirm Password do not match");
     }
