@@ -9,19 +9,27 @@ import { MdDelete } from 'react-icons/md'
 const UploadProduct = ({ onClose }) => {
 
     const [data, setData] = useState({
+
         productName: "",
         brandName: "",
         category: "",
         productImage: "",
         description: "",
         price: "",
-        selling: ""
+        sellingPrice: ""
     })
     const [openFullScreenImage, setOpenFullScreenImage] = useState(false)
     const [fullScreenImage, setFullScreenImage] = useState("")
 
-    const handleOnChange = () => {
+    const handleOnChange = (e) => {
+        const { name, value } = e.target
 
+        setData((prev) => {
+            return {
+                ...prev,
+                [name]: value
+            }
+        })
     }
 
     const handleUploadProduct = async (e) => {
@@ -48,6 +56,13 @@ const UploadProduct = ({ onClose }) => {
         }));
     };
 
+    // upload product 
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        console.log('data', data);
+    }
+
     return (
         <div className='fixed bg-slate-200/50 w-full h-full bg-opacity-35 top-0 bottom-0 left-0 right-0 flex items-center justify-center'>
             <div className='bg-white p-4 rounded w-full max-w-2xl h-full max-h-[80%] overflow-hidden'>
@@ -57,13 +72,14 @@ const UploadProduct = ({ onClose }) => {
                         <CgClose />
                     </div>
                 </div>
-                <form className='grid p-4 gap-3 overflow-y-auto h-[calc(80vh-100px)] scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-transparent'>
+                <form className='grid p-4 gap-3 overflow-y-auto h-[calc(80vh-100px)] scrollbar-thin scrollbar-thumb-slate-400 scrollbar-track-transparent' onSubmit={handleSubmit}>
 
 
                     <label htmlFor='productName'>Product Name :</label>
                     <input
                         type='text'
                         id='productName'
+                        name='productName'
                         placeholder='enter product name'
                         value={data?.productName}
                         onChange={handleOnChange}
@@ -74,13 +90,15 @@ const UploadProduct = ({ onClose }) => {
                     <input
                         type='text'
                         id='brandName'
+                        name='brandName'
                         placeholder='enter brand name'
                         value={data?.brandName}
                         onChange={handleOnChange}
                         className='p-2 bg-slate-100 border rounded '
                     />
                     <label htmlFor='category' className='mt-3'>Category :</label>
-                    <select value={data.category} className='p-2 bg-slate-100 border rounded '>
+                    <select value={data.category} name='category' onChange={handleOnChange} className='p-2 bg-slate-100 border rounded '>
+                        <option value={""}>Select Category</option>
                         {
                             productCategory.map((el, index) => {
                                 return (
@@ -137,6 +155,43 @@ const UploadProduct = ({ onClose }) => {
 
 
                     </div>
+
+                    <label htmlFor='price' className='mt-3'>Price :</label>
+                    <input
+                        type='number'
+                        id='price'
+                        name='price'
+                        placeholder='enter price'
+                        value={data?.price}
+                        onChange={handleOnChange}
+                        className='p-2 bg-slate-100 border rounded '
+                    />
+
+
+                    <label htmlFor='sellingPrice' className='mt-3'>Selling Price :</label>
+                    <input
+                        type='number'
+                        id='sellingPrice'
+                        name='sellingPrice'
+                        placeholder='enter selling Price'
+                        value={data?.sellingPrice}
+                        onChange={handleOnChange}
+                        className='p-2 bg-slate-100 border rounded '
+                    />
+
+                    <label htmlFor='description' className='mt-3'>Description :</label>
+                    <textarea className='h-28 bg-slate-100  border  resize-none p-1 ' 
+                    placeholder='enter product description' 
+                    name='description'
+                    onChange={handleOnChange}
+                    rows={3}>
+
+                    </textarea>
+
+
+
+
+
                     <button className='px-2 py-1 bg-red-600 text-white mb-2 hover:bg-red-800 cursor-pointer'>Upload Product</button>
                 </form>
 
