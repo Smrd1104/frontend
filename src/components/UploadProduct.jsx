@@ -8,7 +8,7 @@ import DisplayImage from './DisplayImage'
 import { MdDelete } from 'react-icons/md'
 import summaryApi from '../common'
 import { toast } from 'react-toastify'
-const UploadProduct = ({ onClose }) => {
+const UploadProduct = ({ onClose, onUploadSuccess }) => {
 
     const [data, setData] = useState({
 
@@ -61,7 +61,7 @@ const UploadProduct = ({ onClose }) => {
     // upload product 
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e.preventDefault();
 
         const response = await fetch(summaryApi.uploadProduct.url, {
             method: summaryApi.uploadProduct.method,
@@ -70,24 +70,25 @@ const UploadProduct = ({ onClose }) => {
                 "content-type": "application/json"
             },
             body: JSON.stringify(data)
+        });
 
+        const responseData = await response.json();
 
-        })
-        const responseData = await response.json()
-
-        if (response.success) {
-            toast.success(responseData?.message)
+        if (response.ok && responseData.success) {
+            toast.success(responseData?.message || "Product uploaded successfully!");
+            onUploadSuccess?.() // 🔥 trigger parent update
+            onClose(); // Close the modal
+        } else {
+            toast.error(responseData?.message || "Something went wrong!");
         }
-        if (response.error) {
-            toast.error(responseData?.message)
-        }
-    }
+    };
+
 
     return (
         <div className='fixed bg-slate-200/50 w-full h-full bg-opacity-35 top-0 bottom-0 left-0 right-0 flex items-center justify-center'>
             <div className='bg-white p-4 rounded w-full max-w-2xl h-full max-h-[80%] overflow-hidden'>
                 <div className='flex items-center justify-between py-3'>
-                    <h2 className='font-bold text-lg '> UploadProduct</h2>
+                    <h2 className='font-bold text-lg '> Upload Product</h2>
                     <div className='w-fit ml-auto text-2xl hover:text-red-600 cursor-pointer' onClick={onClose}>
                         <CgClose />
                     </div>

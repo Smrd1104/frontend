@@ -18,6 +18,7 @@ const AllProducts = () => {
 
   useEffect(() => {
     fetchAllProduct()
+
   }, [])
 
   return (
@@ -28,13 +29,13 @@ const AllProducts = () => {
       </div>
 
       {/* all product */}
-      <div className='flex items-center gap-3 py-5'>
+      <div className='flex flex-wrap items-center gap-3 py-5'>
         {
           allProduct.map((product, index) => {
             return (
               <div key={index} className='bg-white p-4 rounded'>
                 <img src={product?.productImage[0]} width={120} height={120} />
-                <h1>{product.productName}</h1>
+                <h1 className='text-center'>{product.productName}</h1>
               </div>
             )
           })
@@ -45,7 +46,7 @@ const AllProducts = () => {
 
       {
         openUploadProduct && (
-          <UploadProduct onClose={() => setOpenUploadProduct(false)} />
+          <UploadProduct onClose={() => setOpenUploadProduct(false)} onUploadSuccess={fetchAllProduct} />
         )
       }
 
