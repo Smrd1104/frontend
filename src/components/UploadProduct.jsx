@@ -6,6 +6,8 @@ import { FaCloudUploadAlt } from 'react-icons/fa'
 import uploadImage from '../helpers/uploadImage'
 import DisplayImage from './DisplayImage'
 import { MdDelete } from 'react-icons/md'
+import summaryApi from '../common'
+import { toast } from 'react-toastify'
 const UploadProduct = ({ onClose }) => {
 
     const [data, setData] = useState({
@@ -58,9 +60,27 @@ const UploadProduct = ({ onClose }) => {
 
     // upload product 
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
-        console.log('data', data);
+
+        const response = await fetch(summaryApi.uploadProduct.url, {
+            method: summaryApi.uploadProduct.method,
+            credentials: "include",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify(data)
+
+
+        })
+        const responseData = await response.json()
+
+        if (response.success) {
+            toast.success(responseData?.message)
+        }
+        if (response.error) {
+            toast.error(responseData?.message)
+        }
     }
 
     return (
@@ -84,6 +104,7 @@ const UploadProduct = ({ onClose }) => {
                         value={data?.productName}
                         onChange={handleOnChange}
                         className='p-2 bg-slate-100 border rounded '
+                        required
                     />
 
                     <label htmlFor='brandName' className='mt-3'>Brand Name :</label>
@@ -95,9 +116,10 @@ const UploadProduct = ({ onClose }) => {
                         value={data?.brandName}
                         onChange={handleOnChange}
                         className='p-2 bg-slate-100 border rounded '
+                        required
                     />
                     <label htmlFor='category' className='mt-3'>Category :</label>
-                    <select value={data.category} name='category' onChange={handleOnChange} className='p-2 bg-slate-100 border rounded '>
+                    <select value={data.category} required name='category' onChange={handleOnChange} className='p-2 bg-slate-100 border rounded '>
                         <option value={""}>Select Category</option>
                         {
                             productCategory.map((el, index) => {
@@ -115,7 +137,7 @@ const UploadProduct = ({ onClose }) => {
                             <div className='text-slate-500 flex justify-center items-center flex-col gap-2'>
                                 <span className='text-4xl  '><FaCloudUploadAlt /></span>
                                 <p className='text-sm'>Upload Product Image</p>
-                                <input type='file' accept='image/*' id='uploadImageInput' className='hidden' onChange={handleUploadProduct} />
+                                <input type='file' accept='image/*' id='uploadImageInput' className='hidden' required onChange={handleUploadProduct} />
                             </div>
 
                         </div>
@@ -134,6 +156,7 @@ const UploadProduct = ({ onClose }) => {
                                                     alt="img"
                                                     width={100}
                                                     height={100}
+                                                    required
                                                     className="bg-slate-100 border cursor-pointer"
                                                     onClick={() => {
                                                         setOpenFullScreenImage(true)
@@ -165,6 +188,7 @@ const UploadProduct = ({ onClose }) => {
                         value={data?.price}
                         onChange={handleOnChange}
                         className='p-2 bg-slate-100 border rounded '
+                        required
                     />
 
 
@@ -177,14 +201,15 @@ const UploadProduct = ({ onClose }) => {
                         value={data?.sellingPrice}
                         onChange={handleOnChange}
                         className='p-2 bg-slate-100 border rounded '
+                        required
                     />
 
                     <label htmlFor='description' className='mt-3'>Description :</label>
-                    <textarea className='h-28 bg-slate-100  border  resize-none p-1 ' 
-                    placeholder='enter product description' 
-                    name='description'
-                    onChange={handleOnChange}
-                    rows={3}>
+                    <textarea className='h-28 bg-slate-100  border  resize-none p-1 '
+                        placeholder='enter product description'
+                        name='description'
+                        onChange={handleOnChange}
+                        rows={3}>
 
                     </textarea>
 
