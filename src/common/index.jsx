@@ -32,6 +32,10 @@ const summaryApi = {
     uploadProduct: {
         url: `${backendDomain}/api/upload-product`,
         method: "POST"
+    },
+    allProduct: {
+        url: `${backendDomain}/api/get-product`,
+        method: "GET"
     }
 
 }
