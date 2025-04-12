@@ -9,7 +9,7 @@ import uploadImage from '../helpers/uploadImage';
 import DisplayImage from './DisplayImage';
 import summaryApi from '../common';
 
-const AdminEditProduct = ({ onClose, productData,fetchData, onUploadSuccess }) => {
+const AdminEditProduct = ({ onClose, productData, fetchData, onUploadSuccess }) => {
 
     const [data, setData] = useState({
         ...productData,
@@ -153,20 +153,20 @@ const AdminEditProduct = ({ onClose, productData,fetchData, onUploadSuccess }) =
                         {data.productImage.length > 0 ? (
                             <div className='flex items-center gap-2'>
                                 {data.productImage.map((el, index) => (
-                                    <div key={index} className='relative group'>
+                                    <div key={index} className='relative group w-32 h-36 flex justify-center items-center'>
                                         <img
                                             src={el}
                                             alt="img"
                                             width={100}
                                             height={100}
-                                            className="bg-slate-100 border cursor-pointer"
+                                            className="bg-slate-100 border-2 cursor-pointer mx-auto h-full object-fill"
                                             onClick={() => {
                                                 setOpenFullScreenImage(true);
                                                 setFullScreenImage(el);
                                             }}
                                         />
                                         <div
-                                            className='absolute bottom-0 right-0 text-white bg-red-500 p-1 m-1 rounded-full hidden group-hover:block cursor-pointer'
+                                            className='absolute bottom-1 right-5 text-white bg-red-500 p-1   rounded-full hidden group-hover:block cursor-pointer'
                                             onClick={() => handleDeleteProductImage(index)}
                                         >
                                             <MdDelete />
