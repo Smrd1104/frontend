@@ -1,4 +1,4 @@
-const userModel = require("../models/userModel")
+const userModel = require("../../models/userModel")
 
 async function allUsers(req, res) {
     try {
@@ -6,7 +6,7 @@ async function allUsers(req, res) {
 
         const allUsers = await userModel.find()
 
-      
+
 
         res.status(200).json({
             message: "All User",

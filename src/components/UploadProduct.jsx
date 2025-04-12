@@ -8,14 +8,14 @@ import DisplayImage from './DisplayImage'
 import { MdDelete } from 'react-icons/md'
 import summaryApi from '../common'
 import { toast } from 'react-toastify'
-const UploadProduct = ({ onClose, onUploadSuccess }) => {
+const UploadProduct = ({ onClose, fetchData, onUploadSuccess }) => {
 
     const [data, setData] = useState({
 
         productName: "",
         brandName: "",
         category: "",
-        productImage: "",
+        productImage: [],
         description: "",
         price: "",
         sellingPrice: ""
@@ -76,7 +76,8 @@ const UploadProduct = ({ onClose, onUploadSuccess }) => {
 
         if (response.ok && responseData.success) {
             toast.success(responseData?.message || "Product uploaded successfully!");
-            onUploadSuccess?.() // 🔥 trigger parent update
+            onUploadSuccess?.()
+            fetchData()
             onClose(); // Close the modal
         } else {
             toast.error(responseData?.message || "Something went wrong!");
@@ -146,11 +147,11 @@ const UploadProduct = ({ onClose, onUploadSuccess }) => {
                     <div>
                         {
                             data?.productImage?.[0] ? (
-                                <div className='flex items-center  gap-2'>
+                                <div className='flex flex-wrap items-center  gap-2'>
                                     {
                                         data.productImage.map((el, index) => (
 
-                                            <div className='relative group'>
+                                            <div className='relative group w-32 h-36 flex justify-center items-center'>
                                                 <img
                                                     key={index}
                                                     src={el}
@@ -158,13 +159,13 @@ const UploadProduct = ({ onClose, onUploadSuccess }) => {
                                                     width={100}
                                                     height={100}
                                                     required
-                                                    className="bg-slate-100 border cursor-pointer"
+                                                    className="bg-slate-100 border-2 cursor-pointer mx-auto h-full object-fill"
                                                     onClick={() => {
                                                         setOpenFullScreenImage(true)
                                                         setFullScreenImage(el)
                                                     }}
                                                 />
-                                                <div className='absolute bottom-0 right-0 text-white bg-red-500 p-1 m-1 rounded-full hidden group-hover:block cursor-pointer' onClick={() => handleDeleteProductImage(index)}>
+                                                <div className='absolute bottom-0 right-0 text-white bg-red-500 p-1  mr-4  rounded-full hidden group-hover:block cursor-pointer' onClick={() => handleDeleteProductImage(index)}>
                                                     <MdDelete />
                                                 </div>
                                             </div>
@@ -210,7 +211,9 @@ const UploadProduct = ({ onClose, onUploadSuccess }) => {
                         placeholder='enter product description'
                         name='description'
                         onChange={handleOnChange}
-                        rows={3}>
+                        rows={3}
+                        value={data?.description}
+                    >
 
                     </textarea>
 

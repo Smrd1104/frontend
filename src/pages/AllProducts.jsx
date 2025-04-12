@@ -3,6 +3,7 @@ import UploadProduct from '../components/UploadProduct'
 import { useState } from 'react'
 import summaryApi from '../common'
 import { useEffect } from 'react'
+import AdminProductCard from '../components/AdminProductCard'
 
 const AllProducts = () => {
   const [openUploadProduct, setOpenUploadProduct] = useState(false)
@@ -29,14 +30,12 @@ const AllProducts = () => {
       </div>
 
       {/* all product */}
-      <div className='flex flex-wrap items-center gap-3 py-5'>
+      <div className='flex flex-wrap items-center gap-3 py-5 h-[calc(100vh-190px)] overflow-y-scroll '>
         {
           allProduct.map((product, index) => {
             return (
-              <div key={index} className='bg-white p-4 rounded'>
-                <img src={product?.productImage[0]} width={120} height={120} />
-                <h1 className='text-center'>{product.productName}</h1>
-              </div>
+              <AdminProductCard data={product} key={index + "allProduct"} fetchData={fetchAllProduct} />
+
             )
           })
         }
@@ -46,7 +45,7 @@ const AllProducts = () => {
 
       {
         openUploadProduct && (
-          <UploadProduct onClose={() => setOpenUploadProduct(false)} onUploadSuccess={fetchAllProduct} />
+          <UploadProduct onClose={() => setOpenUploadProduct(false)} onUploadSuccess={fetchAllProduct} fetchData={fetchAllProduct} />
         )
       }
 
