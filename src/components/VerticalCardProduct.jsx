@@ -6,7 +6,7 @@ import displayINRCurrency from "../helpers/displayCurrency"
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 import { useRef } from 'react'
 
-const HorizontalCardProduct = ({ category, heading }) => {
+const VerticalCardProduct = ({ category, heading }) => {
 
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
@@ -37,9 +37,9 @@ const HorizontalCardProduct = ({ category, heading }) => {
     }
 
     return (
-        <div className='container mx-auto px-4 my-6 relative '>
+        <div className='container mx-auto px-4 my-6 relative'>
             <h2 className='text-2xl font-semibold py-4'>{heading}</h2>
-            <div className='flex items-center gap-4 md:gap-6 overflow-scroll scrollbar-none' ref={scrollElement}>
+            <div className='flex items-center gap-4 md:gap-6 overflow-x-scroll scrollbar-none' ref={scrollElement}>
 
                 <button onClick={scrollRight} className='absolute z-10 bg-white shadow-md rounded-full p-1 cursor-pointer left-0 text-lg hidden md:block'><FaAngleLeft /></button>
                 <button onClick={scrollRight} className='absolute z-10 bg-white shadow-md rounded-full p-1 cursor-pointer right-0 text-lg hidden md:block'> <FaAngleRight /></button>
@@ -48,17 +48,18 @@ const HorizontalCardProduct = ({ category, heading }) => {
                     (
                         loadingList.map((product, index) => {
                             return (
-                                <div key={index} className='w-full min-w-[280px] md:max-w-[280px]: md:min-w-[360px] max-w-[320px] h-36 bg-white rounded-sm shadow-md flex'>
-                                    <div className='bg-slate-200 h-full p-2 min-w-[120px] md:min-w-[145px] animate-pulse'>
+                                <div key={index} className='w-full min-w-[280px] md:max-w-[280px]: md:min-w-[360px] max-w-[320px]  bg-white rounded-sm shadow-md '>
+                                    <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center animate-pulse'>
+                                        <img src={product?.productImage[0]} className='object-scale-down h-full hover:scale-110 transition-all mix-blend-multiply' />
                                     </div>
-                                    <div className='p-4 grid w-full gap-2'>
-                                        <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 bg-slate-200 animate-pulse rounded-full p-1'></h2>
-                                        <p className='capitalize text-slate-500 bg-slate-200 w-full rounded-full animate-pulse'></p>
-                                        <div className='flex gap-3 w-full'>
-                                            <p className='text-red-500 font-medium p-1 bg-slate-200 w-full  rounded-full animate-pulse'></p>
-                                            <p className='text-slate-500 line-through p-1 bg-slate-200 w-full  rounded-full animate-pulse'></p>
+                                    <div className='p-4 grid gap-3'>
+                                        <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1 bg-slate-200 w-full rounded-full p-1 py-2 animate-pulse'></h2>
+                                        <p className='capitalize text-slate-500 bg-slate-200 w-full rounded-full p-1 py-2 animate-pulse'></p>
+                                        <div className='flex gap-3'>
+                                            <p className='text-red-500 font-medium bg-slate-200 w-full rounded-full p-1 py-2 animate-pulse'></p>
+                                            <p className='text-slate-500 line-through bg-slate-200 w-full rounded-full p-1 py-2 animate-pulse'></p>
                                         </div>
-                                        <button className='text-sm  text-white px-3 py-0.5 rounded-full w-full bg-slate-200  rounded-full animate-pulse'>
+                                        <button className='text-sm  text-white px-3  rounded-full bg-slate-200 w-full p-1 py-2 animate-pulse'>
 
                                         </button>
                                     </div>
@@ -66,16 +67,14 @@ const HorizontalCardProduct = ({ category, heading }) => {
                                 </div>
                             )
                         })
-                    )
-                    :
-                    (
+                    ) : (
                         data.map((product, index) => {
                             return (
-                                <div key={index} className='w-full min-w-[280px] md:max-w-[280px]: md:min-w-[360px] max-w-[320px] h-36 bg-white rounded-sm shadow-md flex'>
-                                    <div className='bg-slate-200 h-full p-2 min-w-[120px] md:min-w-[145px]'>
-                                        <img src={product?.productImage[0]} className='object-scale-down h-full hover:scale-110 transition-all' />
+                                <div key={index} className='w-full min-w-[280px] md:max-w-[280px]: md:min-w-[360px] max-w-[320px]  bg-white rounded-sm shadow-md '>
+                                    <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center'>
+                                        <img src={product?.productImage[0]} className='object-scale-down h-full hover:scale-110 transition-all mix-blend-multiply' />
                                     </div>
-                                    <div className='p-4 grid'>
+                                    <div className='p-4 grid gap-3'>
                                         <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1'>{product?.productName}</h2>
                                         <p className='capitalize text-slate-500'>{product?.category}</p>
                                         <div className='flex gap-3'>
@@ -90,6 +89,7 @@ const HorizontalCardProduct = ({ category, heading }) => {
                                 </div>
                             )
                         })
+
                     )
 
                 }
@@ -99,4 +99,4 @@ const HorizontalCardProduct = ({ category, heading }) => {
     )
 }
 
-export default HorizontalCardProduct 
+export default VerticalCardProduct 

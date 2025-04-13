@@ -2,6 +2,7 @@ import React from 'react'
 import CategoryList from '../components/CategoryList'
 import BannerProduct from '../components/BannerProduct'
 import HorizontalCardProduct from '../components/HorizontalCardProduct'
+import VerticalCardProduct from '../components/VerticalCardProduct'
 
 const Home = () => {
     return (
@@ -11,16 +12,17 @@ const Home = () => {
 
             <HorizontalCardProduct category={"airpods"} heading={"Top's Airpods"} />
             <HorizontalCardProduct category={"earphones"} heading={"Top's Earphones"} />
-            {/* <HorizontalCardProduct category={"camera"} heading={"Top's Camera"} />
-            <HorizontalCardProduct category={"mobiles"} heading={"Top's mobiles"} />
-            <HorizontalCardProduct category={"mouse"} heading={"Top's mouse"} />
-            <HorizontalCardProduct category={"printers"} heading={"Top's printers"} />
-            <HorizontalCardProduct category={"processor"} heading={"Top's processor"} />
-            <HorizontalCardProduct category={"refrigerator"} heading={"Top's refrigerator"} />
-            <HorizontalCardProduct category={"speakers"} heading={"Top's speakers"} />
-            <HorizontalCardProduct category={"televisions"} heading={"Top's televisions"} />
-            <HorizontalCardProduct category={"trimmers"} heading={"Top's trimmers"} />
-            <HorizontalCardProduct category={"watches"} heading={"Top's watches"} /> */}
+
+            <VerticalCardProduct category={"mobiles"} heading={"Mobiles"} />
+            <VerticalCardProduct category={"camera"} heading={"Camera products"} />
+            <VerticalCardProduct category={"mouse"} heading={"Accessories hardwares & Mouse"} />
+            <VerticalCardProduct category={"printers"} heading={"Accessories hardwares & printers"} />
+            <VerticalCardProduct category={"processor"} heading={"Computer & Laptop processor"} />
+            <VerticalCardProduct category={"refrigerator"} heading={"Home Appliances & Refrigerator"} />
+            <VerticalCardProduct category={"speakers"} heading={"Home theatre speakers"} />
+            <VerticalCardProduct category={"televisions"} heading={"LED & OLD TV's"} />
+            <VerticalCardProduct category={"trimmers"} heading={"Shaving & trimmers"} />
+            <VerticalCardProduct category={"watches"} heading={"Wrist Watches"} />
 
 
         </div>
