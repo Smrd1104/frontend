@@ -3,19 +3,14 @@ import { useEffect } from 'react'
 import { useState } from 'react'
 import fetchCategoryWiseProduct from "../helpers/fetchCategoryWiseProduct"
 import displayINRCurrency from "../helpers/displayCurrency"
-import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
-import { useRef } from 'react'
 import { Link } from 'react-router-dom'
 import addToCart from '../helpers/addToCart'
 
-const VerticalCardProduct = ({ category, heading }) => {
+const CategoryWiseProductDisplay = ({ category, heading }) => {
 
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
-    const loadingList = new Array(13).fill(null)
-
-    const [scroll, setScroll] = useState(0)
-    const scrollElement = useRef()
+    const loadingList = new Array(17).fill(null)
 
 
     const fetchData = async () => {
@@ -31,20 +26,12 @@ const VerticalCardProduct = ({ category, heading }) => {
         fetchData()
     }, [])
 
-    const scrollRight = () => {
-        scrollElement.current.scrollLeft += 300
-    }
-    const scrollLeft = () => {
-        scrollElement.current.scrollLeft -= 300
-    }
+
 
     return (
         <div className='container mx-auto px-4 my-6 relative'>
             <h2 className='text-2xl font-semibold py-4'>{heading}</h2>
-            <div className='flex items-center gap-4 md:gap-6 overflow-x-scroll scrollbar-none' ref={scrollElement}>
-
-                <button onClick={scrollLeft} className='absolute z-10 bg-white shadow-md rounded-full p-1 cursor-pointer left-0 text-lg hidden md:block'><FaAngleLeft /></button>
-                <button onClick={scrollRight} className='absolute z-10 bg-white shadow-md rounded-full p-1 cursor-pointer right-0 text-lg hidden md:block'> <FaAngleRight /></button>
+            <div className='grid grid-cols-[repeat(auto-fit,minmax(300px,320px))] justify-between md:gap-6 overflow-x-scroll scrollbar-none' >
 
                 {loading ?
                     (
@@ -83,7 +70,7 @@ const VerticalCardProduct = ({ category, heading }) => {
                                             <p className='text-red-500 font-medium'>{displayINRCurrency(product?.sellingPrice)}</p>
                                             <p className='text-slate-500 line-through'>{displayINRCurrency(product?.price)}</p>
                                         </div>
-                                        <button className='text-sm bg-red-500 hover:bg-red-800 text-white px-3 py-0.5 rounded-full' onClick={(e) => addToCart(e, product?._id)}>
+                                        <button className='text-sm bg-red-500 hover:bg-red-800 text-white px-3 py-0.5 rounded-full'onClick={(e) => addToCart(e, product?._id)}>
                                             Add to cart
                                         </button>
                                     </div>
@@ -101,4 +88,4 @@ const VerticalCardProduct = ({ category, heading }) => {
     )
 }
 
-export default VerticalCardProduct 
+export default CategoryWiseProductDisplay 

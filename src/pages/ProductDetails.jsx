@@ -7,6 +7,7 @@ import { FaStar, FaStarHalf } from 'react-icons/fa';
 import displayINRCurrency from "../helpers/displayCurrency"
 import { useCallback } from 'react';
 import VerticalCardProduct from "../components/VerticalCardProduct"
+import CategoryWiseProductDisplay from '../components/CategoryWiseProductDisplay';
 const ProductDetails = () => {
 
   const [data, setData] = useState({
@@ -94,9 +95,20 @@ const ProductDetails = () => {
 
         <div className='flex flex-col lg:flex-row-reverse gap-4 h-96'>
 
-          <div className='lg:h-96 lg:w-96 w-[300px] h-[300px] bg-slate-200 relative '>
-            <img src={activeImage} className='w-full h-full object-scale-down mix-blend-multiply' onMouseMove={handleZoomImage}
-              onMouseLeave={handleLeaveImageZoom} />
+          <div className='lg:h-96 lg:w-96 w-[300px] h-[300px] bg-slate-200 relative p-2 '>
+            {activeImage ? (
+              <img
+                src={activeImage}
+                className='w-full h-full object-scale-down mix-blend-multiply'
+                onMouseMove={handleZoomImage}
+                onMouseLeave={handleLeaveImageZoom}
+                alt="Product Image"
+              />
+            ) : (
+              <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
+                No Image
+              </div>
+            )}
             {/* product zoom */}
             {
               zoomImage && (
@@ -126,7 +138,7 @@ const ProductDetails = () => {
                     {
                       productImageListLoading.map((el, index) => {
                         return (
-                          <div key={"loadingImage"} className='h-20 w-20 bg-slate-200 rounded'>
+                          <div key={index} className='h-20 w-20 bg-slate-200 rounded'>
 
                           </div>
                         )
@@ -216,7 +228,7 @@ const ProductDetails = () => {
       </div>
       <div className='mt-20'>
         {!loading && data.category && (
-          <VerticalCardProduct category={data.category} heading={"Recommended Products "} />
+          <CategoryWiseProductDisplay category={data?.category} heading={"Recommended Products "} />
         )}
       </div>
     </div >
