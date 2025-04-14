@@ -100,7 +100,7 @@ const ProductDetails = () => {
             {/* product zoom */}
             {
               zoomImage && (
-                <div className='hidden lg:block absolute min-w-[500px] overflow-hidden min-h-[500px] p-1 bg-slate-200 -right-[510px] top-0 z-40'>
+                <div className='hidden lg:block absolute min-w-[500px] overflow-hidden min-h-[500px] p-1 bg-slate-200 -right-[510px] top-0 '>
                   <div
                     className='w-full h-full min-h-[500px]  mix-blend-multiply scale-150 '
 
