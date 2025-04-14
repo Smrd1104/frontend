@@ -48,6 +48,10 @@ const summaryApi = {
     categoryWiseProduct: {
         url: `${backendDomain}/api/category-product`,
         method: "POST",
+    },
+    productDetails: {
+        url: `${backendDomain}/api/product-details`,
+        method: "POST"
     }
 
 
