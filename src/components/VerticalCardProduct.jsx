@@ -5,6 +5,7 @@ import fetchCategoryWiseProduct from "../helpers/fetchCategoryWiseProduct"
 import displayINRCurrency from "../helpers/displayCurrency"
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa'
 import { useRef } from 'react'
+import { Link } from 'react-router-dom'
 
 const VerticalCardProduct = ({ category, heading }) => {
 
@@ -70,7 +71,7 @@ const VerticalCardProduct = ({ category, heading }) => {
                     ) : (
                         data.map((product, index) => {
                             return (
-                                <div key={index} className='w-full min-w-[280px] md:max-w-[280px]: md:min-w-[360px] max-w-[320px]  bg-white rounded-sm shadow-md '>
+                                <Link to={"product/" + product?._id} key={index} className='w-full min-w-[280px] md:max-w-[280px]: md:min-w-[360px] max-w-[320px]  bg-white rounded-sm shadow-md '>
                                     <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center'>
                                         <img src={product?.productImage[0]} className='object-scale-down h-full hover:scale-110 transition-all mix-blend-multiply' />
                                     </div>
@@ -81,12 +82,12 @@ const VerticalCardProduct = ({ category, heading }) => {
                                             <p className='text-red-500 font-medium'>{displayINRCurrency(product?.sellingPrice)}</p>
                                             <p className='text-slate-500 line-through'>{displayINRCurrency(product?.price)}</p>
                                         </div>
-                                        <button className='text-sm bg-red-500 hover:bg-red-800 text-white px-3 py-0.5 rounded-full'>
+                                        <button className='text-sm bg-red-500 hover:bg-red-800 text-white px-3 py-0.5 rounded-full' onClick={() => { addToCart(e, product?._id) }}>
                                             Add to cart
                                         </button>
                                     </div>
 
-                                </div>
+                                </Link>
                             )
                         })
 
