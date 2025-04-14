@@ -17,15 +17,22 @@ async function addToCartController(req, res) {
         }
 
         const payload = {
-
             productId: productId,
             quantity: 1,
             userId: currentUser,
-        }
-        const newAddToCart = new addToCartModel(payload)
-
-        const SaveProduct = await newAddToCart(save)
-
+        };
+        
+        const newAddToCart = new addToCartModel(payload);
+        
+        const SaveProduct = await newAddToCart.save(); // <-- FIXED
+        
+        res.json({
+            message: "product added",
+            data: SaveProduct,
+            error: false,
+            success: true
+        });
+        
         res.json({
             message: "product added",
             data: SaveProduct,

@@ -8,8 +8,11 @@ import summaryApi from './common';
 import Context from "./context/index"
 import { useDispatch } from 'react-redux';
 import { setUserDetails } from './store/userSlice';
+import { useState } from 'react';
 
 function App() {
+
+  const [cartProductCount, setCartProductCount] = useState(0)
 
   const dispatch = useDispatch()
   const fetchUserDetails = async () => {
@@ -27,14 +30,34 @@ function App() {
 
 
   }
+
+  const fetchUserAddToCart = async () => {
+
+    const dataResponse = await fetch(summaryApi.addToCartProductCount.url, {
+      method: summaryApi.addToCartProductCount.method,
+      credentials: "include",
+    })
+
+    const dataApi = await dataResponse.json()
+
+    console.log('dataApi ', dataApi);
+    setCartProductCount(dataApi?.data?.count)
+
+
+
+  }
   useEffect(() => {
     fetchUserDetails()
+
+    // user details
+
+    fetchUserAddToCart()
   }, [])
 
   return (
     <>
 
-      <Context.Provider value={{ fetchUserDetails }}>
+      <Context.Provider value={{ fetchUserDetails, cartProductCount, fetchUserAddToCart }}>
         <ToastContainer />
         <Header />
         <main className='min-h-[calc(100vh-120px)] pt-16'>

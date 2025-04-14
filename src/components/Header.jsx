@@ -11,6 +11,8 @@ import { useDispatch } from 'react-redux'
 import { setUserDetails } from '../store/userSlice'
 import { useState } from 'react'
 import ROLE from '../common/role'
+import Context from '../context'
+import { useContext } from 'react'
 
 const Header = () => {
 
@@ -18,6 +20,8 @@ const Header = () => {
 
     const user = useSelector(state => state?.user?.user)
     const dispatch = useDispatch()
+    const context = useContext(Context)
+    console.log('header add to cart count ', context);
     const handleLogout = async () => {
         const fetchData = await fetch(summaryApi.logout_user.url, {
             method: summaryApi.logout_user.method,
@@ -94,7 +98,7 @@ const Header = () => {
                     <div className='text-2xl cursor-pointer relative'>
                         <span><FaShoppingCart /></span>
                         <div className='absolute -top-2 -right-3 text-white bg-red-500 w-5 h-5 rounded-full p-1 flex items-center justify-center'>
-                            <p className='text-xs'>0</p>
+                            <p className='text-xs'>{context?.cartProductCount}</p>
                         </div>
                     </div>
 
