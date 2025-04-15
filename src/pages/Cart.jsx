@@ -124,9 +124,9 @@ const Cart = () => {
                         loading ?
                             (
 
-                                loadingCart.map(el => {
+                                loadingCart.map((el, index) => {
                                     return (
-                                        <div key={el + "Add to cart loading"} className='w-full h-32 bg-slate-200 my-2 border border-slate-300 animate-pulse rounded'>
+                                        <div key={el + "Add to cart loading" + index} className='w-full h-32 bg-slate-200 my-2 border border-slate-300 animate-pulse rounded'>
 
                                         </div>
                                     )

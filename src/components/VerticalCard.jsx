@@ -24,7 +24,7 @@ const VerticalCard = ({ loading, data = [] }) => {
     return (
         <div>
 
-            <div className='grid grid-cols-[repeat(auto-fit,minmax(260px,280px))]  md:justify-between justify-center  md:gap-6 gap-3 overflow-x-scroll scrollbar-none' >
+            <div className='grid grid-cols-[repeat(auto-fit,minmax(260px,290px))]  md:justify-between justify-center  md:gap-6 gap-3 overflow-x-scroll scrollbar-none' >
 
                 {loading ?
                     (
@@ -52,7 +52,7 @@ const VerticalCard = ({ loading, data = [] }) => {
                     ) : (
                         data.map((product, index) => {
                             return (
-                                <Link to={"/product/" + product?._id} key={index} className='w-full min-w-[300px] md:max-w-[280px]: md:min-w-[310px] max-w-[320px]  bg-white rounded-sm shadow-md ' onClick={() => scrollTop()}>
+                                <Link to={"/product/" + product?._id} key={index} className='w-full min-w-[300px] md:max-w-[280px]: md:min-w-[290px] max-w-[320px]  bg-white rounded-sm shadow-md ' onClick={() => scrollTop()}>
                                     <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center'>
                                         <img src={product?.productImage[0]} className='object-scale-down h-full hover:scale-110 transition-all mix-blend-multiply' />
                                     </div>
