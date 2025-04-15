@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import summaryApi from "../common/index"
 import { useEffect } from 'react';
 import { FaStar, FaStarHalf } from 'react-icons/fa';
@@ -8,6 +8,9 @@ import displayINRCurrency from "../helpers/displayCurrency"
 import { useCallback } from 'react';
 import VerticalCardProduct from "../components/VerticalCardProduct"
 import CategoryWiseProductDisplay from '../components/CategoryWiseProductDisplay';
+import addToCart from '../helpers/addToCart';
+import { useContext } from 'react';
+import Context from '../context';
 const ProductDetails = () => {
 
   const [data, setData] = useState({
@@ -26,7 +29,8 @@ const ProductDetails = () => {
   const productImageListLoading = new Array(4).fill(null)
   const [activeImage, setActiveImage] = useState("")
   const [zoomImage, setZoomImage] = useState(false)
-
+  const navigate = useNavigate()
+  const { fetchUserAddToCart } = useContext(Context)
 
   const [zoomImageCoordinate, setZoomImageCoordinate] = useState({
     x: 0,
@@ -86,6 +90,25 @@ const ProductDetails = () => {
     setZoomImage(false)
   }
 
+  const handleAddToCart = async (e, id) => {
+    try {
+      await addToCart(e, id);            // wait for add to cart
+      await fetchUserAddToCart();        // wait for cart update
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+    }
+  }
+
+  const handleBuyProduct = async (e, id) => {
+    try {
+      await addToCart(e, id);            // wait for add to cart
+      await fetchUserAddToCart();        // wait for cart update
+      navigate("/cart");                 // navigate after success
+    } catch (error) {
+      console.error("Error buying product:", error);
+    }
+  }
+
 
   return (
     <div className='container mx-auto p-4'>
@@ -138,7 +161,7 @@ const ProductDetails = () => {
                     {
                       productImageListLoading.map((el, index) => {
                         return (
-                          <div key={index} className='h-20 w-20 bg-slate-200 rounded'>
+                          <div key={"loadingImage" + index} className='h-20 w-20 bg-slate-200 rounded'>
 
                           </div>
                         )
@@ -212,8 +235,8 @@ const ProductDetails = () => {
               </div>
 
               <div className='flex items-center gap-3'>
-                <button className='border-2 border-red-600 px-3 py-1 rounded min-w-[120px] text-red-600 font-medium hover:bg-red-600 hover:text-white cursor-pointer transition-all'>Buy</button>
-                <button className='border-2 border-red-600 px-3 py-1 rounded min-w-[120px] text-white bg-red-600 hover:text-red-600 hover:bg-white cursor-pointer transition-all'>Add to cart</button>
+                <button className='border-2 border-red-600 px-3 py-1 rounded min-w-[120px] text-red-600 font-medium hover:bg-red-600 hover:text-white cursor-pointer transition-all' onClick={(e) => handleBuyProduct(e, data._id)}>Buy</button>
+                <button className='border-2 border-red-600 px-3 py-1 rounded min-w-[120px] text-white bg-red-600 hover:text-red-600 hover:bg-white cursor-pointer transition-all' onClick={(e) => handleAddToCart(e, data._id)}>Add to cart</button>
 
               </div>
               <div>

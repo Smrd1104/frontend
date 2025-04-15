@@ -23,8 +23,10 @@ const Header = () => {
     const context = useContext(Context)
     const navigate = useNavigate()
     const searchInput = useLocation()
-    const [search, setSearch] = useState(searchInput?.search.split("=")[1])
-    console.log('searchInput: ', searchInput?.search.split("=")[1]);
+    const urlSearch = new URLSearchParams(searchInput?.search)
+    const searchQuery = urlSearch.getAll("q")
+    const [search, setSearch] = useState(searchQuery)
+
 
     console.log('header add to cart count ', context);
     const handleLogout = async () => {
@@ -38,6 +40,7 @@ const Header = () => {
         if (data.success) {
             toast.success(data.message)
             dispatch(setUserDetails(null))
+            navigate("/")
         }
         if (data.error) {
             toast.error(data.message)
