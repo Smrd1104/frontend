@@ -1,5 +1,6 @@
 import React from 'react'
 import Logo from './Logo'
+import img from "../assets/logo.png"
 import { GrSearch } from 'react-icons/gr'
 import { FaRegCircleUser } from 'react-icons/fa6'
 import { FaShoppingCart } from 'react-icons/fa'
@@ -65,9 +66,11 @@ const Header = () => {
                 {/* logo section */}
                 <div className=''>
                     <Link to={"/"}>
-                        <Logo w={90} h={50} />
+                        <img src={img} className='md:w-[100px] w-[80px] h-[80px] md:h-[90px] object-contain' alt="Logo" />
+                        {/* <Logo w={90} h={50} /> */}
                     </Link>
                 </div>
+
                 {/* seach section */}
                 <div className='hidden lg:flex items-center w-full justify-between max-w-sm border border-gray-400 rounded-full focus-within:shadow-md'>
                     <input type='text' placeholder='search products here...' className='w-full  outline-none pl-2' onChange={handleSearch} value={search} />

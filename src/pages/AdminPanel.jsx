@@ -19,7 +19,7 @@ const AdminPanel = () => {
 
       <aside className='bg-white min-h-full w-full max-w-60 customShadow'>
         <div className='h-32 flex flex-col justify-center items-center '>
-          <div className='text-4xl cursor-pointer relative flex justify-center' onClick={() => setMenuDisplay(prev => !prev)}>
+          <div className='text-4xl cursor-pointer relative flex justify-center mt-5' onClick={() => setMenuDisplay(prev => !prev)}>
             {
               user?.profilePic ? (
                 <img src={user?.profilePic} alt={user?.name} className='w-20 h-20 rounded-full' />
