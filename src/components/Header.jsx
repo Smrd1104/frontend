@@ -95,12 +95,17 @@ const Header = () => {
                         }
 
                     </div>
-                    <div className='text-2xl cursor-pointer relative'>
-                        <span><FaShoppingCart /></span>
-                        <div className='absolute -top-2 -right-3 text-white bg-red-500 w-5 h-5 rounded-full p-1 flex items-center justify-center'>
-                            <p className='text-xs'>{context?.cartProductCount}</p>
-                        </div>
-                    </div>
+                    {
+                        user?._id && (
+                            <div className='text-2xl cursor-pointer relative'>
+                                <span><FaShoppingCart /></span>
+                                <div className='absolute -top-2 -right-3 text-white bg-red-500 w-5 h-5 rounded-full p-1 flex items-center justify-center'>
+                                    <p className='text-xs'>{context?.cartProductCount}</p>
+                                </div>
+                            </div>
+                        )
+                    }
+
 
                     {/* login section */}
                     <div>
