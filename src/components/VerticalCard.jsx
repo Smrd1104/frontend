@@ -1,18 +1,15 @@
 import React, { useContext } from 'react'
-import { useEffect } from 'react'
-import { useState } from 'react'
-import fetchCategoryWiseProduct from "../helpers/fetchCategoryWiseProduct"
-import displayINRCurrency from "../helpers/displayCurrency"
-import { Link } from 'react-router-dom'
-import addToCart from '../helpers/addToCart'
-import Context from '../context'
 import scrollTop from '../helpers/scrollTop'
+import Context from '../context'
+import { Link } from 'react-router-dom'
+import displayINRCurrency from '../helpers/displayCurrency'
 
-const CategoryWiseProductDisplay = ({ category, heading }) => {
+const VerticalCard = ({ loading, data = [] }) => {
 
-    const [data, setData] = useState([])
-    const [loading, setLoading] = useState(false)
+
+
     const loadingList = new Array(17).fill(null)
+
 
     const { fetchUserAddToCart } = useContext(Context)
 
@@ -24,25 +21,10 @@ const CategoryWiseProductDisplay = ({ category, heading }) => {
 
 
 
-    const fetchData = async () => {
-        setLoading(true)
-        const CategoryProduct = await fetchCategoryWiseProduct(category)
-        setLoading(false)
-
-        console.log("horizontal data", CategoryProduct)
-        setData(CategoryProduct?.data)
-    }
-
-    useEffect(() => {
-        fetchData()
-    }, [])
-
-
-
     return (
-        <div className='container mx-auto px-4 my-6 relative'>
-            <h2 className='text-2xl font-semibold py-4'>{heading}</h2>
-            <div className='grid grid-cols-[repeat(auto-fit,minmax(300px,320px))] justify-between md:gap-6 overflow-x-scroll scrollbar-none' >
+        <div>
+
+            <div className='grid grid-cols-[repeat(auto-fit,minmax(260px,280px))]  md:justify-between justify-center  md:gap-6 gap-3 overflow-x-scroll scrollbar-none' >
 
                 {loading ?
                     (
@@ -70,7 +52,7 @@ const CategoryWiseProductDisplay = ({ category, heading }) => {
                     ) : (
                         data.map((product, index) => {
                             return (
-                                <Link to={"/product/" + product?._id} key={index} className='w-full min-w-[280px] md:max-w-[280px]: md:min-w-[360px] max-w-[320px]  bg-white rounded-sm shadow-md ' onClick={() =>scrollTop() }>
+                                <Link to={"/product/" + product?._id} key={index} className='w-full min-w-[300px] md:max-w-[280px]: md:min-w-[310px] max-w-[320px]  bg-white rounded-sm shadow-md ' onClick={() => scrollTop()}>
                                     <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center'>
                                         <img src={product?.productImage[0]} className='object-scale-down h-full hover:scale-110 transition-all mix-blend-multiply' />
                                     </div>
@@ -94,9 +76,8 @@ const CategoryWiseProductDisplay = ({ category, heading }) => {
 
                 }
             </div>
-
         </div>
     )
 }
 
-export default CategoryWiseProductDisplay 
+export default VerticalCard
