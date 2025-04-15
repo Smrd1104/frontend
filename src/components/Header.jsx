@@ -3,7 +3,7 @@ import Logo from './Logo'
 import { GrSearch } from 'react-icons/gr'
 import { FaRegCircleUser } from 'react-icons/fa6'
 import { FaShoppingCart } from 'react-icons/fa'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import summaryApi from '../common'
 import { toast } from 'react-toastify'
@@ -21,6 +21,7 @@ const Header = () => {
     const user = useSelector(state => state?.user?.user)
     const dispatch = useDispatch()
     const context = useContext(Context)
+    const navigate = useNavigate()
     console.log('header add to cart count ', context);
     const handleLogout = async () => {
         const fetchData = await fetch(summaryApi.logout_user.url, {
@@ -39,6 +40,15 @@ const Header = () => {
         }
     }
 
+    const handleSearch = (e) => {
+        const { value } = e.target
+
+        if (value) {
+            navigate(`/search?q=${value}`)
+        } else {
+            navigate("/search")
+        }
+    }
 
     return (
         <header className='h-16 shadow-md bg-white fixed w-full z-40'>
@@ -51,8 +61,8 @@ const Header = () => {
                 </div>
                 {/* seach section */}
                 <div className='hidden lg:flex items-center w-full justify-between max-w-sm border border-gray-400 rounded-full focus-within:shadow-md'>
-                    <input type='text' placeholder='search products here...' className='w-full  outline-none pl-2' />
-                    <div className='text-lg min-w-[50px] bg-red-600 h-8 flex items-center justify-center rounded-r-full text-white'>
+                    <input type='text' placeholder='search products here...' className='w-full  outline-none pl-2' onChange={handleSearch} />
+                    <div className='text-lg min-w-[50px] bg-red-600 h-8 flex items-center justify-center rounded-r-full text-white' >
                         <GrSearch />
                     </div>
                 </div>
@@ -83,7 +93,7 @@ const Header = () => {
                                     <nav>
                                         {
                                             user?.role === ROLE.ADMIN && (
-                                                <Link to={"/admin-panel/all-products"} className='whitespace-nowrap  hover:bg-slate-200 p-2' onClick={() => setMenuDisplay(prev => !prev)}>
+                                                <Link to={"/admin-panel/all-products"} className='whitespace-nowrap hover:bg-slate-200 p-2' onClick={() => setMenuDisplay(prev => !prev)}>
                                                     Admin panel
                                                 </Link>
                                             )
