@@ -68,8 +68,8 @@ const BannerProduct = () => {
                 <div className='absolute z-10 h-full w-full md:flex items-center hidden'>
                     <div className=' flex justify-between w-full text-2xl'>
 
-                        <button onClick={prevImage} className='bg-white shadow-md rounded-full p-1 cursor-pointer'><FaAngleLeft /></button>
-                        <button onClick={nextImage} className='bg-white shadow-md rounded-full p-1 cursor-pointer'> <FaAngleRight /></button>
+                        <button onClick={prevImage} className='bg-white shadow-md rounded px-3 py-10 cursor-pointer text-sm'><FaAngleLeft /></button>
+                        <button onClick={nextImage} className='bg-white shadow-md rounded px-3 py-10 cursor-pointer text-sm'> <FaAngleRight /></button>
                     </div>
 
                 </div>

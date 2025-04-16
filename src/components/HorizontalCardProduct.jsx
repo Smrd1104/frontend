@@ -19,13 +19,13 @@ const HorizontalCardProduct = ({ category, heading }) => {
     const [scroll, setScroll] = useState(0)
     const scrollElement = useRef()
 
-      const { fetchUserAddToCart } = useContext(Context)
-    
-        const handleAddToCart = async(e, id) => {
-    
-            await addToCart(e,id)
-            fetchUserAddToCart()
-        }
+    const { fetchUserAddToCart } = useContext(Context)
+
+    const handleAddToCart = async (e, id) => {
+
+        await addToCart(e, id)
+        fetchUserAddToCart()
+    }
 
 
     const fetchData = async () => {
@@ -53,8 +53,8 @@ const HorizontalCardProduct = ({ category, heading }) => {
             <h2 className='text-2xl font-semibold py-4'>{heading}</h2>
             <div className='flex items-center gap-4 md:gap-6 overflow-scroll scrollbar-none' ref={scrollElement}>
 
-                <button onClick={scrollLeft} className='absolute z-10 bg-white shadow-md rounded-full p-1 cursor-pointer left-0 text-lg hidden md:block'><FaAngleLeft /></button>
-                <button onClick={scrollRight} className='absolute z-10 bg-white shadow-md rounded-full p-1 cursor-pointer right-0 text-lg hidden md:block'> <FaAngleRight /></button>
+                <button onClick={scrollLeft} className='absolute z-10 bg-white shadow-md  rounded px-2 py-6 cursor-pointer left-4  hidden md:block text-sm'><FaAngleLeft /></button>
+                <button onClick={scrollRight} className='absolute z-10 bg-white shadow-md rounded px-2 py-6 cursor-pointer right-4  hidden md:block text-sm'> <FaAngleRight /></button>
 
                 {loading ?
                     (

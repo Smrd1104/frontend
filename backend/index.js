@@ -7,10 +7,16 @@ const cookieParser = require('cookie-parser')
 
 const app = express()
 
+const allowedOrigins = [
+    "http://localhost:5173",         // local dev
+    "https://shop-e-mart.web.app"    // production frontend
+];
+
 app.use(cors({
-    origin: "http://localhost:5173", // for local dev
+    origin: allowedOrigins,
     credentials: true
-}))
+}));
+
 
 app.use(express.json())
 app.use(cookieParser())
