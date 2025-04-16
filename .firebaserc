@@ -1,0 +1,10 @@
+{
+  "projects": {
+    "default": "shop-e-mart",
+    "shop": "shop-e-mart",
+    "y": "shop-e-mart"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
+}
