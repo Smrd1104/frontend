@@ -96,9 +96,9 @@ const CategoryProduct = () => {
   }
 
 
-  useEffect(()=>{
+  useEffect(() => {
 
-  },[sortBy])
+  }, [sortBy])
 
 
   return (
@@ -107,7 +107,7 @@ const CategoryProduct = () => {
       {/* desktop version */}
       <div className='hidden lg:grid grid-cols-[200px_1fr] gap-10'>
         {/* left side */}
-        <div className='p-2 bg-white min-h-[calc(100vh-120px)] overflow-y-scroll '>
+        <div className='p-2 bg-white min-h-[calc(100vh-120px)] overflow-y-scroll scrollbar-none '>
           {/* sort by */}
           <div>
             <h2 className='uppercase text-base border-b border-slate-400 font-md text-slate-500'>sort by</h2>
@@ -146,7 +146,7 @@ const CategoryProduct = () => {
         {/* right side product */}
         <div className='p-4'>
           <p className='font-medium text-slate-800 text-lg my-2 '>Search Result:{data?.length}</p>
-          <div className=' min-h-[calc(100vh-120px)] overflow-y-scroll  max-h-[calc(100vh-120px)] '>
+          <div className=' min-h-[calc(100vh-120px)] overflow-y-scroll  scrollbar-none max-h-[calc(100vh-120px)] '>
             {
               data?.length !== 0 && !loading && (
                 <VerticalCard data={data} loading={loading} />
