@@ -1,4 +1,6 @@
-const backendDomain = "https://shop-e-mart.onrender.com"
+const backendDomain = process.env.NODE_ENV === "production"
+    ? "https://shop-e-mart.onrender.com"
+    : "https://localhost:8080";
 
 const summaryApi = {
     signUp: {
