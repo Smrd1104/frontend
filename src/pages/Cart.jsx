@@ -120,7 +120,7 @@ const Cart = () => {
             <div className='text-center text-lg my-3'>
                 {
                     data.length === 0 && !loading && (
-                        <p className='bg-white py-5'>No Data</p>
+                        <p className='bg-white py-5'>Empty cart</p>
                     )
                 }
             </div>
@@ -151,7 +151,7 @@ const Cart = () => {
                                             </div>
                                             <div className='px-4 py-2 relative w-full'>
                                                 {/* delete product */}
-                                                <div className='absolute right-2 top-2 p-2  hover:bg-red-600 hover:text-white text-red-600 rounded-full' onClick={() => deleteCartProduct(product?._id)}>
+                                                <div className='absolute right-2 top-2 p-2  hover:bg-red-600 hover:text-white text-red-600 rounded-full cursor-pointer' onClick={() => deleteCartProduct(product?._id)}>
                                                     <MdDelete />
                                                 </div>
                                                 <h2 className='text-lg lg:text-xl text-ellipsis line-clamp-1 '>{product?.productId?.productName}</h2>
@@ -164,9 +164,9 @@ const Cart = () => {
 
 
                                                 <div className='flex items-center gap-2 mt-2'>
-                                                    <button className='text-center w-6 h-6 rounded hover:bg-red-600 hover:text-white text-red-500 border  border-red-600' onClick={() => decreaseQty(product?._id, product?.quantity)}>-</button>
+                                                    <button className='text-center w-6 h-6 rounded hover:bg-red-600 hover:text-white text-red-500 border  border-red-600 cursor-pointer' onClick={() => decreaseQty(product?._id, product?.quantity)}>-</button>
                                                     <span>{product?.quantity}</span>
-                                                    <button className='w-6 h-6 text-red-500 rounded hover:bg-red-600 hover:text-white border border-red-600' onClick={() => increaseQty(product?._id, product?.quantity)}>+</button>
+                                                    <button className='w-6 h-6 text-red-500 rounded hover:bg-red-600 hover:text-white border border-red-600 cursor-pointer' onClick={() => increaseQty(product?._id, product?.quantity)}>+</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -201,7 +201,7 @@ const Cart = () => {
                                         <p>Total Price</p>
                                         <p>{displayINRCurrency(totalPrice)}</p>
                                     </div>
-                                    <button className='bg-blue-600 p-2 text-white w-full'>Payment</button>
+                                    <button className='bg-blue-600 p-2 text-white w-full cursor-pointer'>Payment</button>
 
                                 </div>
                             )
