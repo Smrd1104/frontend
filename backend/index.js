@@ -10,7 +10,8 @@ const app = express();
 // CORS configuration
 const allowedOrigins = [
     "http://localhost:5173",         // local dev
-    "https://shop-e-mart.web.app"    // production frontend
+    "https://shop-e-mart.web.app",
+    "https://shop-e-mart.onrender.com"    // production frontend
 ];
 
 app.use(cors({
