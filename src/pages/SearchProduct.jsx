@@ -12,7 +12,7 @@ const SearchProduct = () => {
 
     const query = useLocation()
 
-    console.log('query', query.search);
+    // console.log('query', query.search);
 
     const fetchProduct = async () => {
         setLoading(true)
@@ -28,7 +28,7 @@ const SearchProduct = () => {
         fetchProduct()
     }, [query])
 
-    console.log('query', query);
+    // console.log('query', query);
     return (
         <div className='container mx-auto p-4'>
             {

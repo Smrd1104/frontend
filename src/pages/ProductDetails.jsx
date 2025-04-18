@@ -37,7 +37,7 @@ const ProductDetails = () => {
     y: 0
   })
 
-  console.log("product Id", params)
+  // console.log("product Id", params)
 
   const fetchProductDetails = async () => {
     setLoading(true)
@@ -59,7 +59,7 @@ const ProductDetails = () => {
     setActiveImage(dataResponse?.data?.productImage[0])
 
   }
-  console.log('data', data);
+  // console.log('data', data);
 
   useEffect(() => {
     fetchProductDetails()
@@ -73,7 +73,7 @@ const ProductDetails = () => {
   const handleZoomImage = useCallback((e) => {
     setZoomImage(true)
     const { left, top, width, height } = e.target.getBoundingClientRect()
-    console.log("coordinate", left, top, width, height)
+    // console.log("coordinate", left, top, width, height)
 
     const x = (e.clientX - left) / width
     const y = (e.clientY - top) / height

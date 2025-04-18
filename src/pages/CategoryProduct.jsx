@@ -11,7 +11,7 @@ const CategoryProduct = () => {
   const [loading, setLoading] = useState(false)
 
   const [sortBy, setSortBy] = useState("")
-  console.log('sortBy: ', sortBy);
+  // console.log('sortBy: ', sortBy);
   const navigate = useNavigate()
   const [selectCategory, SetSelectCategory] = useState({})
   const [filterCategoryList, setFilterCategoryList] = useState([])
@@ -25,8 +25,8 @@ const CategoryProduct = () => {
     urlCategoryListObject[el] = true
 
   })
-  console.log('urlCategoryListObject: ', urlCategoryListObject);
-  console.log("urlCategoryListArray", urlCategoryListArray)
+  // console.log('urlCategoryListObject: ', urlCategoryListObject);
+  // console.log("urlCategoryListArray", urlCategoryListArray)
   const params = useParams()
 
   const fetchData = async () => {

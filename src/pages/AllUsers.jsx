@@ -37,7 +37,7 @@ const AllUsers = () => {
         }
 
 
-        console.log(dataResponse)
+        // console.log(dataResponse)
     }
 
     useEffect(() => {

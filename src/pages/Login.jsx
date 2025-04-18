@@ -53,7 +53,6 @@ const Login = () => {
     }
 
   }
-  console.log('data: ', data);
   return (
     <section id='login'>
       <div className='container mx-auto p-4'>

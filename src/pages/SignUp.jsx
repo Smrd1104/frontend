@@ -70,7 +70,6 @@ const SignUp = () => {
 
 
   }
-  console.log('data: ', data);
   return (
     <section id='signup'>
       <div className='container mx-auto p-4'>
