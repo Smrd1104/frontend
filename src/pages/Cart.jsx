@@ -180,33 +180,39 @@ const Cart = () => {
 
                 {/* summary  */}
 
-                <div className='mt-5 lg:mt-2 w-full max-w-sm'>
-                    {
-                        loading ?
-                            (
-                                <div className='h-36 bg-slate-200 border-slate-300 animate-pulse '>
-
-                                </div>
-                            )
-                            :
-                            (
-                                <div className='h-36 bg-white'>
-                                    <h2 className='text-white bg-red-500 px-4 py-1'>Summary</h2>
-                                    <div className='flex items-center justify-between px-4 py-2 gap-2 text-lg font-medium text-slate-600 '>
-                                        <p>Quantity</p>
-                                        <p>{totalQty}</p>
+                {
+                    data[0] && (
+                        <div className='mt-5 lg:mt-2 w-full max-w-sm'>
+                        {
+                            loading ?
+                                (
+                                    <div className='h-36 bg-slate-200 border-slate-300 animate-pulse '>
+    
                                     </div>
-
-                                    <div className='flex items-center justify-between px-4 py-2 gap-2 text-lg font-medium text-slate-600'>
-                                        <p>Total Price</p>
-                                        <p>{displayINRCurrency(totalPrice)}</p>
+                                )
+                                :
+                                (
+                                    <div className='h-36 bg-white'>
+                                        <h2 className='text-white bg-red-500 px-4 py-1'>Summary</h2>
+                                        <div className='flex items-center justify-between px-4 py-2 gap-2 text-lg font-medium text-slate-600 '>
+                                            <p>Quantity</p>
+                                            <p>{totalQty}</p>
+                                        </div>
+    
+                                        <div className='flex items-center justify-between px-4 py-2 gap-2 text-lg font-medium text-slate-600'>
+                                            <p>Total Price</p>
+                                            <p>{displayINRCurrency(totalPrice)}</p>
+                                        </div>
+                                        <button className='bg-blue-600 p-2 text-white w-full cursor-pointer'>Payment</button>
+    
                                     </div>
-                                    <button className='bg-blue-600 p-2 text-white w-full cursor-pointer'>Payment</button>
+                                )
+                        }
+                    </div>
+                    )
+                }
 
-                                </div>
-                            )
-                    }
-                </div>
+             
 
             </div>
 
