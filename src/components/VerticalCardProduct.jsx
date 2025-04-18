@@ -32,7 +32,7 @@ const VerticalCardProduct = ({ category, heading }) => {
         const CategoryProduct = await fetchCategoryWiseProduct(category)
         setLoading(false)
 
-        console.log("horizontal data", CategoryProduct)
+        // console.log("horizontal data", CategoryProduct)
         setData(CategoryProduct?.data)
     }
 

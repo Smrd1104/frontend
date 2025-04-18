@@ -29,7 +29,7 @@ const Header = () => {
     const [search, setSearch] = useState(searchQuery)
 
 
-    console.log('header add to cart count ', context);
+    // console.log('header add to cart count ', context);
     const handleLogout = async () => {
         const fetchData = await fetch(summaryApi.logout_user.url, {
             method: summaryApi.logout_user.method,
