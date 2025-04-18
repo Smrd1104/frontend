@@ -1,4 +1,6 @@
-const backendDomain = "https://shop-e-mart.onrender.com"
+const backendDomain = import.meta.env.MODE === "development"
+    ? "http://localhost:8080"
+    : "https://shop-e-mart.onrender.com";
 
 const summaryApi = {
     signUp: {
