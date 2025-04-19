@@ -7,9 +7,12 @@ import Context from "../context"
 import displayINRCurrency from "../helpers/displayCurrency"
 import { MdDelete } from 'react-icons/md'
 import { loadStripe } from '@stripe/stripe-js'
+import { useNavigate } from 'react-router-dom'
 const Cart = () => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
+
+    const navigate = useNavigate()
 
     const context = useContext(Context)
 
