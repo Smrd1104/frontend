@@ -20,6 +20,7 @@ const updateToCartProduct = require('../controller/user/updateToCartProduct')
 const deleteAddToCartProduct = require('../controller/user/deleteAddToCartProduct')
 const searchProduct = require('../controller/product/searchProduct')
 const filterProduct = require('../controller/product/filterProduct')
+const { paymentController } = require('../controller/order/paymentController')
 
 router.post("/signup", userSignUpController)
 router.post("/signin", userSignInController)
@@ -51,6 +52,10 @@ router.get("/view-cart-product", authToken, addToCartViewProduct)
 router.post("/update-cart-product", authToken, updateToCartProduct)
 router.post("/delete-cart-product", authToken, deleteAddToCartProduct)
 
+
+// payment and order
+
+router.post("/checkout", authToken, paymentController)
 
 
 

@@ -111,6 +111,25 @@ const Cart = () => {
 
     }
 
+    const handlePayment = async () => {
+
+        const response = await fetch(summaryApi.payment.url, {
+            method: summaryApi.payment.method,
+            credentials: "include",
+            headers: {
+                "content-type": "application/json"
+            },
+            body: JSON.stringify({
+                cartItems: data,
+            })
+        })
+
+        const responseData = await response.json()
+
+        console.log('payment response: ', responseData);
+
+    }
+
     const totalQty = data.reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0)
     const totalPrice = data.reduce((prev, curr) => prev + (curr?.quantity * curr?.productId?.sellingPrice), 0)
 
@@ -158,7 +177,7 @@ const Cart = () => {
                                                 <p className='text-slate-400 capitalize'>{product?.productId?.category}</p>
 
                                                 <div className='flex justify-between items-center'>
-                                                    <p className='text-red-500 font-medium text-md lg:text-lg'>{displayINRCurrency(product?.productId?.sellingPrice)}</p>
+                                                    <p className='text-red-500 font-medium text-md lg:text-lg'>{displayINRCurrency(product?.productId?.sellingPrice * 100)}</p>
                                                     <p className='text-red-500 font-medium text-md lg:text-lg'>{displayINRCurrency(product?.productId?.sellingPrice * product?.quantity)}</p>
                                                 </div>
 
@@ -183,36 +202,36 @@ const Cart = () => {
                 {
                     data[0] && (
                         <div className='mt-5 lg:mt-2 w-full max-w-sm'>
-                        {
-                            loading ?
-                                (
-                                    <div className='h-36 bg-slate-200 border-slate-300 animate-pulse '>
-    
-                                    </div>
-                                )
-                                :
-                                (
-                                    <div className='h-36 bg-white'>
-                                        <h2 className='text-white bg-red-500 px-4 py-1'>Summary</h2>
-                                        <div className='flex items-center justify-between px-4 py-2 gap-2 text-lg font-medium text-slate-600 '>
-                                            <p>Quantity</p>
-                                            <p>{totalQty}</p>
+                            {
+                                loading ?
+                                    (
+                                        <div className='h-36 bg-slate-200 border-slate-300 animate-pulse '>
+
                                         </div>
-    
-                                        <div className='flex items-center justify-between px-4 py-2 gap-2 text-lg font-medium text-slate-600'>
-                                            <p>Total Price</p>
-                                            <p>{displayINRCurrency(totalPrice)}</p>
+                                    )
+                                    :
+                                    (
+                                        <div className='h-36 bg-white'>
+                                            <h2 className='text-white bg-red-500 px-4 py-1'>Summary</h2>
+                                            <div className='flex items-center justify-between px-4 py-2 gap-2 text-lg font-medium text-slate-600 '>
+                                                <p>Quantity</p>
+                                                <p>{totalQty}</p>
+                                            </div>
+
+                                            <div className='flex items-center justify-between px-4 py-2 gap-2 text-lg font-medium text-slate-600'>
+                                                <p>Total Price</p>
+                                                <p>{displayINRCurrency(totalPrice)}</p>
+                                            </div>
+                                            <button className='bg-blue-600 p-2 text-white w-full cursor-pointer' onClick={handlePayment}>Payment</button>
+
                                         </div>
-                                        <button className='bg-blue-600 p-2 text-white w-full cursor-pointer'>Payment</button>
-    
-                                    </div>
-                                )
-                        }
-                    </div>
+                                    )
+                            }
+                        </div>
                     )
                 }
 
-             
+
 
             </div>
 

@@ -48,8 +48,8 @@ const VerticalCardProduct = ({ category, heading }) => {
     }
 
     return (
-        <div className='container mx-auto px-4 my-6 relative'>
-            <h2 className='text-2xl font-semibold py-4'>{heading}</h2>
+        <div className='container mx-auto px-4 my-4 relative py-10 bg-white'>
+            <h2 className='text-2xl font-semibold '>{heading}</h2>
             <div className='flex items-center gap-4 md:gap-6 overflow-x-scroll scrollbar-none' ref={scrollElement}>
 
                 <button onClick={scrollLeft} className='absolute z-10 bg-white shadow-md rounded px-2 py-8 cursor-pointer left-4 text-sm hidden md:block'><FaAngleLeft /></button>
@@ -81,7 +81,7 @@ const VerticalCardProduct = ({ category, heading }) => {
                     ) : (
                         data.map((product, index) => {
                             return (
-                                <Link to={"product/" + product?._id} key={index} className='w-full min-w-[280px] md:max-w-[280px]: md:min-w-[360px] max-w-[320px]  bg-white rounded-sm shadow-md '>
+                                <Link to={"product/" + product?._id} key={index} className='w-full min-w-[280px] md:max-w-[280px]: md:min-w-[360px] max-w-[320px]  bg-slate-50 rounded-sm shadow-md '>
                                     <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center'>
                                         <img src={product?.productImage[0]} className='object-scale-down h-full hover:scale-110 transition-all mix-blend-multiply' />
                                     </div>

@@ -49,8 +49,8 @@ const HorizontalCardProduct = ({ category, heading }) => {
     }
 
     return (
-        <div className='container mx-auto px-4 my-6 relative '>
-            <h2 className='text-2xl font-semibold py-4'>{heading}</h2>
+        <div className='container mx-auto px-4 my-4  py-10 relative bg-white '>
+            <h2 className='text-2xl font-semibold'>{heading}</h2>
             <div className='flex items-center gap-4 md:gap-6 overflow-scroll scrollbar-none' ref={scrollElement}>
 
                 <button onClick={scrollLeft} className='absolute z-10 bg-white shadow-md  rounded px-2 py-6 cursor-pointer left-4  hidden md:block text-sm'><FaAngleLeft /></button>
@@ -83,7 +83,7 @@ const HorizontalCardProduct = ({ category, heading }) => {
                     (
                         data.map((product, index) => {
                             return (
-                                <Link to={"product/" + product?._id} key={index} className='w-full min-w-[280px] md:max-w-[280px]: md:min-w-[360px] max-w-[320px] h-36 bg-white rounded-sm shadow-md flex'>
+                                <Link to={"product/" + product?._id} key={index} className='w-full min-w-[280px] md:max-w-[280px]: md:min-w-[360px] max-w-[320px] h-36 bg-slate-50 rounded-sm shadow-md flex'>
                                     <div className='bg-slate-200 h-full p-2 min-w-[120px] md:min-w-[145px]'>
                                         <img src={product?.productImage[0]} className='object-scale-down h-full hover:scale-110 transition-all' />
                                     </div>
