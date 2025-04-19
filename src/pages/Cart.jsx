@@ -6,6 +6,7 @@ import { useContext } from 'react'
 import Context from "../context"
 import displayINRCurrency from "../helpers/displayCurrency"
 import { MdDelete } from 'react-icons/md'
+import { loadStripe } from '@stripe/stripe-js'
 const Cart = () => {
     const [data, setData] = useState([])
     const [loading, setLoading] = useState(false)
@@ -112,24 +113,41 @@ const Cart = () => {
     }
 
     const handlePayment = async () => {
+        try {
+            const stripePromise = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
 
-        const response = await fetch(summaryApi.payment.url, {
-            method: summaryApi.payment.method,
-            credentials: "include",
-            headers: {
-                "content-type": "application/json"
-            },
-            body: JSON.stringify({
-                cartItems: data,
-            })
-        })
+            const response = await fetch(summaryApi.payment.url, {
+                method: summaryApi.payment.method,
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    cartItems: data,  // Replace 'data' with your actual cart state
+                })
+            });
 
-        const responseData = await response.json()
+            const responseData = await response.json();
 
-        console.log('payment response: ', responseData);
+            if (responseData?.id) {
+                const result = await stripePromise.redirectToCheckout({
+                    sessionId: responseData.id
+                });
+                if (result.error) {
+                    console.error('Stripe redirect error:', result.error.message);
+                    alert(`Payment failed: ${result.error.message}`);
+                }
+            } else {
+                console.error('Invalid session ID from server:', responseData);
+                alert('Payment could not be initiated. Please try again.');
+            }
 
-    }
-
+        } catch (error) {
+            console.error('Payment error:', error);
+            alert('An unexpected error occurred during payment. Please try again.');
+        }
+        navigate('/success');  // Redirect to the success page
+    };
     const totalQty = data.reduce((previousValue, currentValue) => previousValue + currentValue.quantity, 0)
     const totalPrice = data.reduce((prev, curr) => prev + (curr?.quantity * curr?.productId?.sellingPrice), 0)
 
@@ -177,7 +195,7 @@ const Cart = () => {
                                                 <p className='text-slate-400 capitalize'>{product?.productId?.category}</p>
 
                                                 <div className='flex justify-between items-center'>
-                                                    <p className='text-red-500 font-medium text-md lg:text-lg'>{displayINRCurrency(product?.productId?.sellingPrice * 100)}</p>
+                                                    <p className='text-red-500 font-medium text-md lg:text-lg'>{displayINRCurrency(product?.productId?.sellingPrice)}</p>
                                                     <p className='text-red-500 font-medium text-md lg:text-lg'>{displayINRCurrency(product?.productId?.sellingPrice * product?.quantity)}</p>
                                                 </div>
 
