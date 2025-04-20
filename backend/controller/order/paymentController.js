@@ -9,6 +9,11 @@ const paymentController = async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
+        const allowedOrigins = [
+            "http://localhost:5173",         // local development
+            "https://shop-e-mart.web.app",   // production frontend
+            "https://shop-e-mart.onrender.com"
+        ];
 
         // Choose the first allowed origin as the base for success and cancel
         const baseUrl = allowedOrigins.includes(req.headers.origin)
