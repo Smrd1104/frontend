@@ -10,6 +10,11 @@ const paymentController = async (req, res) => {
             return res.status(404).json({ message: "User not found" });
         }
 
+        // Choose the first allowed origin as the base for success and cancel
+        const baseUrl = allowedOrigins.includes(req.headers.origin)
+            ? req.headers.origin
+            : allowedOrigins[0];  // fallback to the first allowed
+
         const params = {
             submit_type: "pay",
             mode: "payment",
@@ -37,8 +42,8 @@ const paymentController = async (req, res) => {
                 },
                 quantity: item.quantity
             })),
-            success_url: "http://localhost:5173/success",
-            cancel_url: "http://localhost:5173/cancel",
+            success_url: `${baseUrl}/success`,
+            cancel_url: `${baseUrl}/cancel`,
         };
 
         const session = await stripe.checkout.sessions.create(params);
