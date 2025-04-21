@@ -1,13 +1,13 @@
 const stripe = require("../../config/stripe");
 const userModel = require("../../models/userModel");
 
-const paymentController = async (req, res) => {
+const paymentController = async (request, response) => {
     try {
-        const { cartItems } = req.body;
+        const { cartItems } = request.body;
 
-        const user = await userModel.findOne({ _id: req.userId });
+        const user = await userModel.findOne({ _id: request.userId });
         if (!user) {
-            return res.status(404).json({ message: "User not found" });
+            return response.status(404).json({ message: "User not found" });
         }
         const allowedOrigins = [
             "http://localhost:5173",         // local development
@@ -16,8 +16,8 @@ const paymentController = async (req, res) => {
         ];
 
         // Choose the first allowed origin as the base for success and cancel
-        const baseUrl = allowedOrigins.includes(req.headers.origin)
-            ? req.headers.origin
+        const baseUrl = allowedOrigins.includes(request.headers.origin)
+            ? request.headers.origin
             : allowedOrigins[0];  // fallback to the first allowed
 
         const params = {
@@ -29,6 +29,9 @@ const paymentController = async (req, res) => {
                 { shipping_rate: "shr_1RFVSz4daNVaY89kXIMFhOE0" }
             ],
             customer_email: user.email,
+            metadata: {
+                userId: request.userId,
+            },
             line_items: cartItems.map(item => ({
                 price_data: {
                     currency: "INR",
@@ -54,10 +57,10 @@ const paymentController = async (req, res) => {
         const session = await stripe.checkout.sessions.create(params);
 
         // Send only the session ID
-        res.status(200).json({ id: session.id });
+        response.status(200).json({ id: session.id });
 
     } catch (err) {
-        res.status(500).json({
+        response.status(500).json({
             message: err.message || err,
             success: false,
             error: true,

@@ -4,7 +4,7 @@ require('dotenv').config();
 const connectDB = require('./config/db');
 const router = require('./routes');
 const cookieParser = require('cookie-parser');
-
+const bodyParser = require('body-parser');
 const app = express();
 
 const allowedOrigins = [
@@ -17,10 +17,13 @@ app.use(cors({
     origin: allowedOrigins,
     credentials: true
 }));
-
+app.use(bodyParser.json());
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api", router);
+
+// Raw body parser for webhooks
+app.use('/webhook', bodyParser.raw({ type: 'application/json' }));
 
 const PORT = process.env.PORT || 8080;
 
