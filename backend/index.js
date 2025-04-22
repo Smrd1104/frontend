@@ -4,6 +4,7 @@ require('dotenv').config();
 const connectDB = require('./config/db');
 const router = require('./routes');
 const cookieParser = require('cookie-parser');
+const webhooks = require('./controller/order/webhook');
 const bodyParser = require('body-parser');
 const app = express();
 
@@ -17,13 +18,18 @@ app.use(cors({
     origin: allowedOrigins,
     credentials: true
 }));
+
+// Raw body parser for Stripe webhook route FIRST!
+app.post('/api/webhook',
+    express.raw({ type: 'application/json' }),
+    webhooks
+);
+
+// Other middleware applies to all other routes
 app.use(bodyParser.json());
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api", router);
-
-// Raw body parser for webhooks
-app.use('/webhook', bodyParser.raw({ type: 'application/json' }));
 
 const PORT = process.env.PORT || 8080;
 

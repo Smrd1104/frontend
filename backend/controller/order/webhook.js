@@ -9,14 +9,14 @@ async function getLineItems(lineItems) {
     if (lineItems?.data?.length) {
         for (const item of lineItems.data) {
             const product = await stripe.products.retrieve(item.price.product);
-            const productId = product.metadata.productId;
+            const productId = product.metadata?.productId || '';
 
             const productData = {
                 productId: productId,
                 name: product.name,
                 price: item.price.unit_amount / 100,
                 quantity: item.quantity,
-                image: product.image,
+                image: product.images?.[0] || '',
             };
 
             productItems.push(productData);
@@ -25,61 +25,66 @@ async function getLineItems(lineItems) {
     return productItems;
 }
 
-const webhooks = async (request, response) => {
-    const signature = request.headers['stripe-signature'];
-    const payloadString = JSON.stringify(request.body);
 
+const webhooks = async (request, response) => {
+    const sig = request.headers['stripe-signature'];
     let event;
+
     try {
+        // Use the raw body directly - don't stringify it
         event = stripe.webhooks.constructEvent(
-            payloadString,
-            signature,
+            request.body,  // This is already raw
+            sig,
             endpointSecret
         );
     } catch (err) {
-        response.status(400).send(`Webhook error: ${err.message}`);
-        return;
+        console.error(`⚠️ Webhook signature verification failed: ${err.message}`);
+        return response.status(400).send(`Webhook Error: ${err.message}`);
     }
 
-    // Handle the event
-    switch (event.type) {
-        case 'checkout.session.completed':
-            const session = event.data.object;
-            console.log('Session:', session);
-            const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
+    console.log(`✅ Received event type: ${event.type}`);
 
+    // Handle the checkout.session.completed event
+    if (event.type === 'checkout.session.completed') {
+        const session = event.data.object;
+
+        try {
+            // Verify payment was successful
+            if (session.payment_status !== 'paid') {
+                console.log('Payment not completed, skipping order creation');
+                return response.status(200).send();
+            }
+
+            // Retrieve line items
+            const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
             const productDetails = await getLineItems(lineItems);
+
             const orderDetails = {
                 productDetails: productDetails,
                 email: session.customer_email,
-                userId: session.metadata.userId,
+                userId: session.metadata?.userId || '',
                 paymentDetails: {
                     paymentId: session.payment_intent,
                     payment_method_type: session.payment_method_types,
                     payment_status: session.payment_status,
                 },
-                shipping_options: session.shipping_options || [],  // Handle undefined shipping options
-                totalAmount: session.amount_total / 100,
+                shipping_options: session.shipping_options || [],
+                totalAmount: session.amount_total ? session.amount_total / 100 : 0,
             };
 
+            console.log('💾 Saving order:', orderDetails);
+
             const order = new orderModel(orderDetails);
+            await order.save();
+            console.log('✅ Order saved successfully');
 
-            try {
-                const saveOrder = await order.save();  // Save the order to MongoDB
-                console.log("Order saved:", saveOrder);
-            } catch (error) {
-                console.error("Error saving order:", error);  // Log any errors that occur while saving
-                response.status(500).send("Internal Server Error");
-                return;
-            }
-
-            break;
-
-        default:
-            console.log(`Unhandled event type: ${event.type}`);
+        } catch (error) {
+            console.error('❌ Error processing order:', error);
+            return response.status(500).send('Internal Server Error');
+        }
     }
 
-    response.status(200).send();  // Respond to Stripe that webhook was processed successfully
+    response.status(200).send();
 };
 
 module.exports = webhooks;

@@ -18,7 +18,10 @@ const orderSchema = new mongoose.Schema({
             type: String,
             default: "",
         },
-        payment_method_type: [],
+        payment_method_type: {
+            type: [String],
+            default: []
+        },
         payment_status: {
             type: String,
             default: "",
