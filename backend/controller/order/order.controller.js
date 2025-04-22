@@ -5,7 +5,7 @@ const orderController = async (request, response) => {
 
         const currentUserId = request.userId
 
-        const orderList = await orderModel.find({ userId: currentUserId })
+        const orderList = await orderModel.find({ userId: currentUserId }).sort({ createdAt: -1 })
 
         response.json({
             message: "order list",

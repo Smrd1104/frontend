@@ -30,14 +30,14 @@ const OrderPage = () => {
                 {data.length === 0 && <p>No order available</p>}
             </div>
 
-            <div className='p-4 w-full '>
+            <div className='p-4 w-full  overflow-hidden container mx-auto'>
                 {data.map((item, index) => (
                     <div key={item.userId + index}>
                         <p className='font-medium text-lg'>
                             {moment(item.createdAt).format('LL')}
                         </p>
                         <div className='border rounded border-slate-300 p-2'>
-                            <div className='flex justify-between'>
+                            <div className='flex  flex-col lg:flex-row justify-between'>
                                 <div className='grid gap-5'>
                                     {item.productDetails.map((product, index) => (
                                         <div key={product.productId + index} className='flex gap-3 bg-slate-100'>
@@ -56,7 +56,7 @@ const OrderPage = () => {
                                     ))}
                                 </div>
 
-                                <div className='flex flex-col  gap-4 p-2 min-w-[300px] '>
+                                <div className='flex flex-col    gap-4 p-2 min-w-[300px] '>
                                     <div>
                                         <div className='text-lg font-medium'>Payment Details:</div>
                                         <p className=' ml-1'>Payment Method:{item.paymentDetails.payment_method_type[0]}</p>
