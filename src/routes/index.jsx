@@ -76,6 +76,10 @@ const router = createBrowserRouter([
                         path: "all-products",
                         element: <AllProducts />
                     },
+                    {
+                        path: "order",
+                        element: <OrderPage />
+                    }
                 ]
             },
 
