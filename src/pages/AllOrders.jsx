@@ -24,7 +24,7 @@ const AllOrders = () => {
     }, []);
 
     return (
-        <div className='h-[calc(100vh-190px)] overflow-y-scroll'>
+        <div className='h-[calc(100vh-160px)] overflow-y-scroll'>
 
             {
                 !data[0] && (
