@@ -13,7 +13,7 @@ const AllOrders = () => {
             });
             const responseData = await response.json();
             setData(responseData.data);
-            console.log('order list', responseData);
+
         } catch (error) {
             console.error("Error fetching orders:", error);
         }
@@ -24,10 +24,15 @@ const AllOrders = () => {
     }, []);
 
     return (
-        <div>
-            <div>
-                {data?.length === 0 && <p>No order available</p>}
-            </div>
+        <div className='h-[calc(100vh-190px)] overflow-y-scroll'>
+
+            {
+                !data[0] && (
+
+                    <p>No order available</p>
+
+                )
+            }
 
             <div className='p-4 w-full  overflow-hidden container mx-auto'>
                 {data?.map((item, index) => (
