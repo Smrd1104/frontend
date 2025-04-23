@@ -2,7 +2,9 @@ const stripe = require("../../config/stripe");
 const orderModel = require("../../models/orderProductModel");
 const addToCartModel = require("../../models/cartProductModel")
 
-const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET_KEY;
+const endpointSecret = process.env.NODE_ENV === 'production'
+    ? process.env.STRIPE_WEBHOOK_SECRET_LIVE
+    : process.env.STRIPE_WEBHOOK_SECRET_DEV;
 
 async function getLineItems(lineItems) {
     let productItems = [];
@@ -85,6 +87,7 @@ const webhooks = async (request, response) => {
 
             if (saveOrder?._id) {
                 const deleteCartItem = await addToCartModel.deleteMany({ userId: orderDetails.userId })
+                console.log('deleteCartItem: ', deleteCartItem);
             }
             console.log('✅ Order saved successfully');
 
