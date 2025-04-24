@@ -111,14 +111,14 @@ const ProductDetails = () => {
 
 
   return (
-    <div className='container mx-auto p-4'>
+    <div className='container mx-auto p-4 overflow-hidden'>
       <div className='min-h-[200px] flex flex-col lg:flex-row gap-4'>
 
         {/* productimage */}
 
         <div className='flex flex-col lg:flex-row-reverse gap-4 h-96'>
 
-          <div className='lg:h-96 lg:w-96 w-[300px] h-[300px] bg-slate-200 relative p-2 '>
+          <div className='lg:h-96 lg:w-96 w-[400px] h-[300px] bg-slate-200 relative p-2 '>
             {activeImage ? (
               <img
                 src={activeImage}
@@ -129,15 +129,15 @@ const ProductDetails = () => {
               />
             ) : (
               <div className="w-full h-full bg-gray-100 flex items-center justify-center text-gray-400">
-                No Image
+                image...
               </div>
             )}
             {/* product zoom */}
             {
               zoomImage && (
-                <div className='hidden lg:block absolute min-w-[500px] overflow-hidden min-h-[500px] p-1 bg-slate-200 -right-[510px] top-0 '>
+                <div className='hidden lg:block absolute min-w-[500px] overflow-hidden min-h-[375px] p-1 bg-slate-200 -right-[755px] top-0 '>
                   <div
-                    className='w-full h-full min-h-[500px]  mix-blend-multiply scale-150 '
+                    className='w-full h-full min-h-[375px]  min-w-[740px] mix-blend-multiply scale-150 '
 
                     style={{
                       backgroundImage: `url(${activeImage})`,
@@ -176,7 +176,7 @@ const ProductDetails = () => {
                     {
                       data?.productImage?.map((imgURL, index) => {
                         return (
-                          <div key={imgURL} className='h-20 w-20 bg-slate-200 rounded p-1'>
+                          <div key={imgURL} className='md:h-22 md:w-22 h-24 w-24 bg-slate-200 rounded p-1'>
                             <img src={imgURL} className='w-full h-full object-scale-down mix-blend-multiply cursor-pointer' onMouseEnter={() => handleMouseEnterProduct(imgURL)} onClick={() => handleMouseEnterProduct(imgURL)} />
                           </div>
                         )
@@ -217,7 +217,7 @@ const ProductDetails = () => {
             </div>
 
           ) : (
-            <div className='flex flex-col gap-1'>
+            <div className='flex flex-col gap-1 md:mt-0 mt-5'>
               <p className='bg-red-200 text-red-500 px-2 rounded-full inline-block w-fit'>{data?.brandName}</p>
               <h2 className='text-2xl lg:text-3xl font-medium'>{data?.productName}</h2>
               <p className='text-slate-400 capitalize'>{data?.category}</p>
