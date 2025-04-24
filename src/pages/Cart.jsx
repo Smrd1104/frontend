@@ -12,6 +12,9 @@ const Cart = () => {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const [savedAddresses, setSavedAddresses] = useState([]);
+    const [selectedAddressId, setSelectedAddressId] = useState('');
+
     const [isDeliveryOpen, setIsDeliveryOpen] = useState(false);
     const navigate = useNavigate();
     const context = useContext(Context);
@@ -129,6 +132,30 @@ const Cart = () => {
         return true;
     };
 
+    const fetchSavedAddresses = async () => {
+        try {
+            const res = await fetch(summaryApi.getSavedAddresses.url, {
+                method: summaryApi.getSavedAddresses.method,
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const result = await res.json();
+            if (result.success) {
+                setSavedAddresses(result.data);
+            }
+        } catch (err) {
+            console.error("Failed to fetch addresses:", err);
+        }
+    };
+
+    useEffect(() => {
+        fetchCartData();
+        fetchSavedAddresses();
+    }, []);
+
+
     const handlePayment = async () => {
         if (!validateDeliveryDetails()) {
             setIsDeliveryOpen(true);
@@ -147,8 +174,10 @@ const Cart = () => {
                 },
                 body: JSON.stringify({
                     shippingDetails: formData,
+                    addressId: selectedAddressId || null,
                     cartItems: data,
                 })
+
             });
 
             const result = await response.json();
@@ -248,6 +277,51 @@ const Cart = () => {
                 {/* Summary Section */}
                 {data[0] && (
                     <div className='mt-5 lg:mt-0 w-full max-w-sm'>
+
+                        {/* Delivery Address Selector */}
+                        <div className="p-4 border-t">
+                            <label className="block font-medium mb-2 text-sm text-gray-700">Choose a delivery address</label>
+                            {savedAddresses.length > 0 && (
+                                <div className="space-y-2 mb-4">
+                                    {savedAddresses.map(address => (
+                                        <label key={address._id} className="flex items-start gap-2 cursor-pointer">
+                                            <input
+                                                type="radio"
+                                                name="selectedAddress"
+                                                value={address._id}
+                                                checked={selectedAddressId === address._id}
+                                                onChange={() => {
+                                                    setSelectedAddressId(address._id);
+                                                    setFormData({
+                                                        name: address.name,
+                                                        phone: address.phone,
+                                                        email: address.email,
+                                                        address: address.address,
+                                                        pincode: address.pincode,
+                                                        city: address.city,
+                                                        state: address.state
+                                                    });
+                                                    setError("");
+                                                }}
+                                            />
+                                            <div className="text-sm">
+                                                <p className="font-semibold">{address.name}</p>
+                                                <p>{address.address}, {address.city}, {address.state} - {address.pincode}</p>
+                                                <p>Phone: {address.phone}</p>
+                                                <p>Email: {address.email}</p>
+                                            </div>
+                                        </label>
+                                    ))}
+                                </div>
+                            )}
+
+                            {/* Optionally, show input form for new address */}
+                            <div className="mt-4 border-t pt-4">
+                                <p className="text-sm font-medium mb-2">Or enter a new address:</p>
+                                {/* existing formData inputs go here (name, phone, etc.) */}
+                            </div>
+                        </div>
+
                         <div className='bg-white rounded-lg shadow-md overflow-hidden'>
                             {/* Delivery Details */}
                             <div

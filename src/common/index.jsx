@@ -99,6 +99,10 @@ const summaryApi = {
     deliveryDetails: {
         url: `${backendDomain}/api/delivery`,
         method: "POST"
+    },
+    getSavedAddresses: {
+        url: `${backendDomain}/api/delivery`,
+        method: "GET"
     }
 
 

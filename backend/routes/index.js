@@ -25,12 +25,15 @@ const webhooks = require('../controller/order/webhook')
 const orderController = require('../controller/order/order.controller')
 const allOrderController = require('../controller/order/allorder.controller')
 const deliveryDetails = require('../controller/user/deliveryDetails')
+const getDeliveryDetails = require('../controller/user/getDeliveryDetails')
 
 router.post("/signup", userSignUpController)
 router.post("/signin", userSignInController)
 router.get("/user-details", authToken, userDetailsController)
 router.get("/userLogout", userLogout)
 router.post("/delivery", deliveryDetails);
+router.get("/delivery", authToken, getDeliveryDetails);
+
 
 
 // admin panel
