@@ -24,11 +24,14 @@ const { paymentController } = require('../controller/order/paymentController')
 const webhooks = require('../controller/order/webhook')
 const orderController = require('../controller/order/order.controller')
 const allOrderController = require('../controller/order/allorder.controller')
+const deliveryDetails = require('../controller/user/deliveryDetails')
 
 router.post("/signup", userSignUpController)
 router.post("/signin", userSignInController)
 router.get("/user-details", authToken, userDetailsController)
 router.get("/userLogout", userLogout)
+router.post("/delivery", deliveryDetails);
+
 
 // admin panel
 

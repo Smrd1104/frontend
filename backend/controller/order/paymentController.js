@@ -1,24 +1,61 @@
 const stripe = require("../../config/stripe");
 const userModel = require("../../models/userModel");
+const deliveryModel = require("../../models/deliveryModel");
 
 const paymentController = async (request, response) => {
     try {
-        const { cartItems } = request.body;
+        const { cartItems, shippingDetails } = request.body;
 
+        // Validate required fields
+        if (!Array.isArray(cartItems) || cartItems.length === 0) {
+            return response.status(400).json({
+                message: "Cart items are required and must be a non-empty array",
+                success: false
+            });
+        }
+
+        if (!shippingDetails || !shippingDetails.name || !shippingDetails.phone || !shippingDetails.email) {
+            return response.status(400).json({
+                message: "Shipping details are incomplete",
+                success: false
+            });
+        }
+
+        const requiredFields = ['name', 'phone', 'email', 'address', 'pincode', 'city', 'state'];
+        const missingFields = requiredFields.filter(field => !shippingDetails[field]);
+
+        if (missingFields.length > 0) {
+            return response.status(400).json({
+                message: `Missing required shipping fields: ${missingFields.join(', ')}`,
+                success: false
+            });
+        }
+
+        // Check if user exists
         const user = await userModel.findOne({ _id: request.userId });
         if (!user) {
-            return response.status(404).json({ message: "User not found" });
+            return response.status(404).json({ 
+                message: "User not found",
+                success: false 
+            });
         }
+
+        // Save shipping details to the database
+        const deliveryDetails = new deliveryModel({
+            ...shippingDetails,
+            userId: request.userId
+        });
+        await deliveryDetails.save();
+
         const allowedOrigins = [
-            "http://localhost:5173",         // local development
-            "https://shop-e-mart.web.app",   // production frontend
+            "http://localhost:5173",
+            "https://shop-e-mart.web.app",
             "https://shop-e-mart.onrender.com"
         ];
 
-        // Choose the first allowed origin as the base for success and cancel
         const baseUrl = allowedOrigins.includes(request.headers.origin)
             ? request.headers.origin
-            : allowedOrigins[0];  // fallback to the first allowed
+            : allowedOrigins[0];
 
         const params = {
             submit_type: "pay",
@@ -30,7 +67,9 @@ const paymentController = async (request, response) => {
             ],
             customer_email: user.email,
             metadata: {
-                userId: request.userId,
+                userId: String(request.userId), // Ensure userId is a string
+                deliveryId: String(deliveryDetails._id), // Ensure deliveryId is a string
+                shippingDetails: JSON.stringify(shippingDetails)
             },
             line_items: cartItems.map(item => ({
                 price_data: {
@@ -42,7 +81,7 @@ const paymentController = async (request, response) => {
                             : [item.productId.productImage],
                         metadata: { productId: item.productId._id }
                     },
-                    unit_amount: item.productId.sellingPrice * 100,
+                    unit_amount: item.productId.sellingPrice * 100, // Amount in paise (INR)
                 },
                 adjustable_quantity: {
                     enabled: true,
@@ -56,12 +95,16 @@ const paymentController = async (request, response) => {
 
         const session = await stripe.checkout.sessions.create(params);
 
-        // Send only the session ID
-        response.status(200).json({ id: session.id });
+        // Return the session ID for the client to redirect to Stripe Checkout
+        response.status(200).json({ 
+            success: true,
+            id: session.id 
+        });
 
     } catch (err) {
+        console.error("Payment error:", err);
         response.status(500).json({
-            message: err.message || err,
+            message: err.message || "Payment processing failed",
             success: false,
             error: true,
         });

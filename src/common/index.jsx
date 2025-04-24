@@ -95,6 +95,10 @@ const summaryApi = {
     allOrder: {
         url: `${backendDomain}/api/all-order`,
         method: "GET"
+    },
+    deliveryDetails: {
+        url: `${backendDomain}/api/delivery`,
+        method: "POST"
     }
 
 
