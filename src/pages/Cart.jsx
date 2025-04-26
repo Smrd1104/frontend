@@ -282,7 +282,7 @@ const Cart = () => {
                         <div className="p-4 border-t">
                             <label className="block font-medium mb-2 text-sm text-gray-700">Choose a delivery address</label>
                             {savedAddresses.length > 0 && (
-                                <div className="space-y-2 mb-4">
+                                <div className="space-y-2 mb-4 h-[calc(100vh-550px)] overflow-y-scroll scrollbar-none">
                                     {savedAddresses.map(address => (
                                         <label key={address._id} className="flex items-start gap-2 cursor-pointer">
                                             <input
