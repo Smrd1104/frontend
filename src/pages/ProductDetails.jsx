@@ -125,6 +125,7 @@ const ProductDetails = () => {
                 className='w-full h-full object-scale-down mix-blend-multiply'
                 onMouseMove={handleZoomImage}
                 onMouseLeave={handleLeaveImageZoom}
+                loading="lazy"
                 alt="Product Image"
               />
             ) : (
@@ -177,7 +178,7 @@ const ProductDetails = () => {
                       data?.productImage?.map((imgURL, index) => {
                         return (
                           <div key={imgURL} className='md:h-28 md:w-44 lg:w-22 lg:h-22 h-24 w-24 bg-slate-200 rounded p-1'>
-                            <img src={imgURL} className='w-full h-full object-scale-down mix-blend-multiply cursor-pointer' onMouseEnter={() => handleMouseEnterProduct(imgURL)} onClick={() => handleMouseEnterProduct(imgURL)} />
+                            <img src={imgURL} className='w-full h-full object-scale-down mix-blend-multiply cursor-pointer'loading="lazy" onMouseEnter={() => handleMouseEnterProduct(imgURL)} onClick={() => handleMouseEnterProduct(imgURL)} />
                           </div>
                         )
                       })

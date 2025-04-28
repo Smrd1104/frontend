@@ -11,7 +11,7 @@ const DisplayImage = ({ imgUrl, onClose }) => {
                     <CgClose />
                 </div>
                 <div className='flex items-center p-4 max-w-[80vh] max-h-[80vh]'>
-                    <img src={imgUrl} className='w-full h-full ' />
+                    <img src={imgUrl} className='w-full h-full 'loading="lazy"/>
                 </div>
             </div>
         </div>

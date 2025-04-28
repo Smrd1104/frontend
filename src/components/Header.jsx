@@ -109,7 +109,7 @@ const Header = () => {
                                 <div className='text-3xl cursor-pointer relative flex justify-center' onClick={() => setMenuDisplay(prev => !prev)}>
                                     {
                                         user?.profilePic ? (
-                                            <img src={user?.profilePic} alt={user?.name} className='w-10 h-10 rounded-full' />
+                                            <img src={user?.profilePic} alt={user?.name} className='w-10 h-10 rounded-full'loading="lazy" />
                                         ) :
                                             (
                                                 <FaRegCircleUser />

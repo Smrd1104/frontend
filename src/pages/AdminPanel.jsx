@@ -22,7 +22,7 @@ const AdminPanel = () => {
           <div className='text-4xl cursor-pointer relative flex justify-center mt-5' onClick={() => setMenuDisplay(prev => !prev)}>
             {
               user?.profilePic ? (
-                <img src={user?.profilePic} alt={user?.name} className='w-20 h-20 rounded-full' />
+                <img src={user?.profilePic} alt={user?.name} className='w-20 h-20 rounded-full' loading="lazy"/>
               ) :
                 (
                   <FaRegCircleUser />

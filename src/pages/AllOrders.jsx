@@ -45,7 +45,7 @@ const AllOrders = () => {
                                 <div className='grid gap-5'>
                                     {item.productDetails.map((product, index) => (
                                         <div key={product.productId + index} className='flex gap-3 '>
-                                            <img src={product.image[0]} alt="Product" className='w-28 h-28 bg-white object-scale-down p-2' />
+                                            <img src={product.image[0]} alt="Product" className='w-28 h-28 bg-white object-scale-down p-2'loading="lazy" />
                                             <div>
                                                 <div className='font-medium text-lg text-ellipsis'>{product.name}</div>
                                                 <div className='flex items-center gap-5 mt-1'>

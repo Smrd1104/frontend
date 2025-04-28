@@ -159,6 +159,7 @@ const UploadProduct = ({ onClose, fetchData, onUploadSuccess }) => {
                                                     width={100}
                                                     height={100}
                                                     required
+                                                    loading="lazy"
                                                     className="bg-slate-100 border-2 cursor-pointer mx-auto h-full object-fill"
                                                     onClick={() => {
                                                         setOpenFullScreenImage(true)

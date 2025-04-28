@@ -229,6 +229,7 @@ const Cart = () => {
                                         src={product?.productId?.productImage[0]}
                                         className='w-full h-full object-scale-down mix-blend-multiply'
                                         alt={product?.productId?.productName}
+                                        loading="lazy"
                                     />
                                 </div>
                                 <div className='px-4 py-2 relative w-full'>
