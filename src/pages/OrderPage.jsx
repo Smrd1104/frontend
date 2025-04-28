@@ -69,7 +69,7 @@ const OrderPage = () => {
                                         {
                                             item.shipping_options.map((shipping, index) => {
                                                 return (
-                                                    <div key={shipping.shipping_rate + index} className='ml-1'>Shipping Amount:{shipping.shipping_amount}</div>
+                                                    <div key={shipping.shipping_rate + index} className='ml-1'>Shipping Amount:{displayINRCurrency(shipping.shipping_amount)}</div>
                                                 )
                                             })
                                         }
