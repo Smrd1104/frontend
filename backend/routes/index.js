@@ -79,7 +79,7 @@ router.post('/forgot-password', passwordController.sendOtp);
 router.post('/verify-otp', passwordController.verifyOtp);
 
 // Reset password
-router.post('/reset-password', authToken, passwordController.resetPassword);
+router.post('/reset-password', passwordController.resetPassword);
 
 
 

@@ -144,6 +144,7 @@ async function verifyOtp(req, res) {
     }
 }
 
+// Change the resetPassword function to verify the resetToken instead of using authToken
 async function resetPassword(req, res) {
     try {
         const { newPassword, confirmPassword } = req.body;
@@ -159,8 +160,22 @@ async function resetPassword(req, res) {
             });
         }
 
-        const userId = req.userId;
-        const user = await userModel.findById(userId);
+        // Get reset token from cookie
+        const resetToken = req.cookies?.resetToken;
+        if (!resetToken) {
+            return res.status(401).json({
+                message: "Reset token missing or expired",
+                success: false,
+                error: true
+            });
+        }
+
+        // Verify reset token
+        const decoded = jwt.verify(resetToken, process.env.TOKEN_SECRET_KEY);
+        const email = decoded.email;
+
+        // Find user by email
+        const user = await userModel.findOne({ email });
         if (!user) {
             return res.status(404).json({
                 message: "User not found",

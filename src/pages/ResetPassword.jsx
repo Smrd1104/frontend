@@ -15,44 +15,38 @@ const ResetPassword = () => {
     setLoading(true);
 
     if (newPassword !== confirmPassword) {
-      toast.error('Passwords do not match');
-      setLoading(false);
-      return;
+        toast.error('Passwords do not match');
+        setLoading(false);
+        return;
     }
 
     try {
-      const response = await fetch(summaryApi.resetPassword.url, {
-        method: summaryApi.resetPassword.method,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          newPassword,
-          confirmPassword,
-        }),
-      });
+        const response = await fetch(summaryApi.resetPassword.url, {
+            method: summaryApi.resetPassword.method,
+            credentials: 'include', // ✅ Required for cookies
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                newPassword,
+                confirmPassword,
+            }),
+        });
 
-      const data = await response.json();
+        const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to reset password');
-      }
-
-      if (data.success) {
-        toast.success(data.message || 'Password reset successful');
-        navigate('/login');
-      } else {
-        toast.error(data.message || 'Reset failed');
-      }
+        if (data.success) {
+            toast.success(data.message);
+            navigate('/login');
+        } else {
+            toast.error(data.message);
+        }
     } catch (error) {
-      console.error('Reset error:', error);
-      toast.error(error.message || 'Something went wrong. Please try again.');
+        toast.error(error.message || 'Failed to reset password');
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
-
+};
   return (
     <section className="p-4 flex items-center justify-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
