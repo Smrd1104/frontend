@@ -14,6 +14,8 @@ import { useState } from 'react'
 import ROLE from '../common/role'
 import Context from '../context'
 import { useContext } from 'react'
+import { useEffect } from 'react'
+import { useRef } from 'react'
 
 const Header = () => {
 
@@ -27,6 +29,8 @@ const Header = () => {
     const urlSearch = new URLSearchParams(searchInput?.search)
     const searchQuery = urlSearch.getAll("q")
     const [search, setSearch] = useState(searchQuery)
+    const menuRef = useRef(null); // Define the menuRef using useRef
+
 
 
     // console.log('header add to cart count ', context);
@@ -62,6 +66,22 @@ const Header = () => {
         }
     }
 
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (menuRef.current && !menuRef.current.contains(event.target)) {
+                setMenuDisplay(false); // Close the menu when clicking outside
+            }
+        };
+
+        // Add event listener on mount
+        document.addEventListener('mousedown', handleClickOutside);
+
+        // Cleanup event listener on unmount
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+
     return (
         <header className='h-16 shadow-md bg-white fixed w-full z-40'>
             <div className='h-full flex items-center container mx-auto px-4 justify-between'>
@@ -74,9 +94,9 @@ const Header = () => {
                 </div>
 
                 {/* seach section */}
-                <div className='hidden lg:flex items-center w-full justify-between max-w-sm border border-gray-400 rounded-full focus-within:shadow-md'>
+                <div className='hidden lg:flex items-center focus-within:border-red-500 w-full justify-between max-w-lg py-1  border border-gray-400 rounded focus-within:shadow-md'>
                     <input type='text' placeholder='search products here...' className='w-full  outline-none pl-2' onChange={handleSearch} value={search} />
-                    <div className='text-lg min-w-[50px] bg-red-600 h-8 flex items-center justify-center rounded-r-full text-white' >
+                    <div className='text-lg min-w-[50px] text-red-500 h-8 flex items-center justify-center  ' >
                         <GrSearch />
                     </div>
                 </div>
@@ -101,19 +121,28 @@ const Header = () => {
                         }
 
                         {
-                            menuDisplay &&
-                            (
-                                <div className='absolute  hidden md:block bg-white bottom-0 top-11 p-2 h-fit shadow-lg rounded  '>
-                                    <nav>
-                                        {
-                                            user?.role === ROLE.ADMIN && (
-                                                <Link to={"/admin-panel/all-products"} className='whitespace-nowrap hover:bg-slate-200 p-2' onClick={() => setMenuDisplay(prev => !prev)}>
-                                                    Admin panel
-                                                </Link>
-                                            )
-                                        }
-                                        <Link to={"/order"} className='whitespace-nowrap hover:bg-slate-200 p-2' onClick={() => setMenuDisplay(prev => !prev)} >Order</Link>
-
+                            menuDisplay && (
+                                <div
+                                    ref={menuRef} // Attach the ref to the dropdown menu
+                                    className='absolute hidden md:block bg-white bottom-0 top-11 p-2 h-fit shadow-lg rounded'
+                                >
+                                    <nav className='flex flex-col'>
+                                        {user?.role === ROLE.ADMIN && (
+                                            <Link
+                                                to={"/admin-panel/all-products"}
+                                                className='whitespace-nowrap hover:bg-slate-200 p-2 rounded'
+                                                onClick={() => setMenuDisplay(false)}
+                                            >
+                                                Admin panel
+                                            </Link>
+                                        )}
+                                        <Link
+                                            to={"/order"}
+                                            className='whitespace-nowrap hover:bg-slate-200 p-2 rounded'
+                                            onClick={() => setMenuDisplay(false)}
+                                        >
+                                            Order
+                                        </Link>
                                     </nav>
                                 </div>
                             )

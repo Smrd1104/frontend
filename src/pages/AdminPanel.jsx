@@ -15,10 +15,10 @@ const AdminPanel = () => {
   }, [user])
 
   return (
-    <div className='min-h-[calc(100vh-120px)] md:flex hidden'>
+    <div className='min-h-[calc(100vh-120px)] md:flex hidden '>
 
       <aside className='bg-white min-h-full w-full max-w-60 customShadow'>
-        <div className='h-32 flex flex-col justify-center items-center '>
+        <div className='h-32 flex flex-col justify-center items-center  '>
           <div className='text-4xl cursor-pointer relative flex justify-center mt-5' onClick={() => setMenuDisplay(prev => !prev)}>
             {
               user?.profilePic ? (

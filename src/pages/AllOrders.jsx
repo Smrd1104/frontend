@@ -40,11 +40,11 @@ const AllOrders = () => {
                         <p className='font-medium text-lg'>
                             {moment(item.createdAt).format('LL')}
                         </p>
-                        <div className='border rounded border-slate-300 p-2'>
+                        <div className='border rounded border-slate-300 p-2 bg-white'>
                             <div className='flex  flex-col lg:flex-row justify-between'>
                                 <div className='grid gap-5'>
                                     {item.productDetails.map((product, index) => (
-                                        <div key={product.productId + index} className='flex gap-3 bg-slate-100'>
+                                        <div key={product.productId + index} className='flex gap-3 '>
                                             <img src={product.image[0]} alt="Product" className='w-28 h-28 bg-white object-scale-down p-2' />
                                             <div>
                                                 <div className='font-medium text-lg text-ellipsis'>{product.name}</div>

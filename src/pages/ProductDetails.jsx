@@ -116,9 +116,9 @@ const ProductDetails = () => {
 
         {/* productimage */}
 
-        <div className='flex flex-col lg:flex-row-reverse gap-4 h-96'>
+        <div className='flex flex-col lg:flex-row-reverse gap-4  h-96'>
 
-          <div className='lg:h-96 lg:w-96 w-[400px] h-[300px] bg-slate-200 relative p-2 '>
+          <div className='lg:h-96 lg:w-96 w-full h-[300px] bg-slate-200 relative p-2 '>
             {activeImage ? (
               <img
                 src={activeImage}
@@ -172,11 +172,11 @@ const ProductDetails = () => {
 
                 ) :
                 (
-                  <div className='flex gap-2  lg:flex-col overflow-scroll scrollbar-none h-full '>
+                  <div className='flex gap-2  lg:flex-col overflow-scroll scrollbar-none w-full h-full '>
                     {
                       data?.productImage?.map((imgURL, index) => {
                         return (
-                          <div key={imgURL} className='md:h-22 md:w-22 h-24 w-24 bg-slate-200 rounded p-1'>
+                          <div key={imgURL} className='md:h-28 md:w-44 lg:w-22 lg:h-22 h-24 w-24 bg-slate-200 rounded p-1'>
                             <img src={imgURL} className='w-full h-full object-scale-down mix-blend-multiply cursor-pointer' onMouseEnter={() => handleMouseEnterProduct(imgURL)} onClick={() => handleMouseEnterProduct(imgURL)} />
                           </div>
                         )
@@ -217,7 +217,7 @@ const ProductDetails = () => {
             </div>
 
           ) : (
-            <div className='flex flex-col gap-1 md:mt-0 mt-5'>
+            <div className='flex flex-col gap-1 md:mt-16 lg:mt-0 mt-5'>
               <p className='bg-red-200 text-red-500 px-2 rounded-full inline-block w-fit'>{data?.brandName}</p>
               <h2 className='text-2xl lg:text-3xl font-medium'>{data?.productName}</h2>
               <p className='text-slate-400 capitalize'>{data?.category}</p>
