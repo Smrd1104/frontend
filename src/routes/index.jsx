@@ -2,7 +2,6 @@ import { createBrowserRouter } from "react-router-dom";
 import App from "../App"
 import Home from "../pages/Home";
 import Login from "../pages/Login";
-import ForgotPassword from "../pages/ForgotPassword";
 import SignUp from "../pages/SignUp";
 import AdminPanel from "../pages/AdminPanel";
 import AllUsers from "../pages/AllUsers";
@@ -15,6 +14,9 @@ import Success from "../pages/Success";
 import Cancel from "../pages/Cancel";
 import OrderPage from "../pages/OrderPage";
 import AllOrders from "../pages/AllOrders";
+import ForgotPassword from "../pages/ForgotPassword"
+import ResetPassword from "../pages/ResetPassword";
+import VerifyOtp from "../pages/VerifyOtp";
 const router = createBrowserRouter([
     {
         path: '/',
@@ -64,6 +66,19 @@ const router = createBrowserRouter([
                 path: "order",
                 element: <OrderPage />
             },
+            {
+                path: "forgot-password",
+                element: <ForgotPassword />
+            },
+            {
+                path: "reset-password",
+                element: <ResetPassword />
+            },
+            {
+                path: "verify-otp",
+                element: <VerifyOtp />
+            },
+
 
             {
                 path: "admin-panel",

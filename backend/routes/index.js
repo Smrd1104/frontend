@@ -26,6 +26,7 @@ const orderController = require('../controller/order/order.controller')
 const allOrderController = require('../controller/order/allorder.controller')
 const deliveryDetails = require('../controller/user/deliveryDetails')
 const getDeliveryDetails = require('../controller/user/getDeliveryDetails')
+const passwordController = require('../controller/passwordController')
 
 router.post("/signup", userSignUpController)
 router.post("/signin", userSignInController)
@@ -68,6 +69,18 @@ router.post("/checkout", authToken, paymentController)
 router.post("/webhook", webhooks)
 router.get("/order-list", authToken, orderController)
 router.get("/all-order", authToken, allOrderController)
+
+
+
+// Forgot password - send OTP
+router.post('/forgot-password', passwordController.sendOtp);
+
+// Verify OTP
+router.post('/verify-otp', passwordController.verifyOtp);
+
+// Reset password
+router.post('/reset-password', authToken, passwordController.resetPassword);
+
 
 
 

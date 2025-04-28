@@ -103,6 +103,19 @@ const summaryApi = {
     getSavedAddresses: {
         url: `${backendDomain}/api/delivery`,
         method: "GET"
+    },
+    // Add these new endpoints
+    forgotPassword: {
+        url: `${backendDomain}/api/forgot-password`,
+        method: "POST"
+    },
+    verifyOtp: {
+        url: `${backendDomain}/api/verify-otp`,
+        method: "POST"
+    },
+    resetPassword: {
+        url: `${backendDomain}/api/reset-password`,
+        method: "POST"
     }
 
 
