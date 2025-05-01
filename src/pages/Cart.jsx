@@ -107,61 +107,17 @@ const Cart = () => {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const validateDeliveryDetails = () => {
-        const requiredFields = ['name', 'phone', 'email', 'address', 'pincode', 'city', 'state'];
-        const missingFields = requiredFields.filter(field => !formData[field].trim());
 
-        if (missingFields.length > 0) {
-            setError(`Please fill out: ${missingFields.join(', ')}`);
-            return false;
-        }
 
-        // Basic phone validation
-        if (!/^\d{10}$/.test(formData.phone)) {
-            setError("Please enter a valid 10-digit phone number");
-            return false;
-        }
 
-        // Basic email validation
-        if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
-            setError("Please enter a valid email address");
-            return false;
-        }
-
-        setError("");
-        return true;
-    };
-
-    const fetchSavedAddresses = async () => {
-        try {
-            const res = await fetch(summaryApi.getSavedAddresses.url, {
-                method: summaryApi.getSavedAddresses.method,
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-            const result = await res.json();
-            if (result.success) {
-                setSavedAddresses(result.data);
-            }
-        } catch (err) {
-            console.error("Failed to fetch addresses:", err);
-        }
-    };
 
     useEffect(() => {
         fetchCartData();
-        fetchSavedAddresses();
+
     }, []);
 
 
     const handlePayment = async () => {
-        if (!validateDeliveryDetails()) {
-            setIsDeliveryOpen(true);
-            return;
-        }
-
         setLoading(true);
         try {
             const stripe = await loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
@@ -173,26 +129,28 @@ const Cart = () => {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
-                    shippingDetails: formData,
-                    addressId: selectedAddressId || null,
                     cartItems: data,
                 })
-
             });
 
             const result = await response.json();
 
-            if (result.error) {
-                throw new Error(result.message);
+            console.log("Payment response result:", result); // Log the full result for debugging
+
+            // Check if result has a success field and id
+            if (result?.success && result?.id) {
+                const sessionId = result.id; // Directly access the id here
+
+                const { error } = await stripe.redirectToCheckout({ sessionId });
+
+                if (error) {
+                    toast.error("Payment failed: " + error.message);
+                }
+            } else {
+                toast.error("Payment failed: Invalid response data");
+                console.error("Invalid response data:", result); // Log invalid response
             }
 
-            const { error } = await stripe.redirectToCheckout({
-                sessionId: result.id
-            });
-
-            if (error) {
-                throw error;
-            }
         } catch (error) {
             console.error("Payment error:", error);
             toast.error(error.message || "Payment processing failed");
@@ -200,8 +158,11 @@ const Cart = () => {
             setLoading(false);
         }
 
-        navigate("/success")
+        navigate("/success");
     };
+
+
+
 
     const totalQty = data.reduce((total, item) => total + item.quantity, 0);
     const totalPrice = data.reduce((total, item) => total + (item.quantity * item.productId.sellingPrice), 0);
@@ -279,96 +240,11 @@ const Cart = () => {
                 {data[0] && (
                     <div className='mt-5 lg:mt-0 w-full max-w-sm'>
 
-                        {/* Delivery Address Selector */}
-                        <div className="p-4 border-t">
-                            <label className="block font-medium mb-2 text-sm text-gray-700">Choose a delivery address</label>
-                            {savedAddresses.length > 0 && (
-                                <div className="space-y-2 mb-4 h-[calc(100vh-550px)] overflow-y-scroll scrollbar-none">
-                                    {savedAddresses.map(address => (
-                                        <label key={address._id} className="flex items-start gap-2 cursor-pointer">
-                                            <input
-                                                type="radio"
-                                                name="selectedAddress"
-                                                value={address._id}
-                                                checked={selectedAddressId === address._id}
-                                                onChange={() => {
-                                                    setSelectedAddressId(address._id);
-                                                    setFormData({
-                                                        name: address.name,
-                                                        phone: address.phone,
-                                                        email: address.email,
-                                                        address: address.address,
-                                                        pincode: address.pincode,
-                                                        city: address.city,
-                                                        state: address.state
-                                                    });
-                                                    setError("");
-                                                }}
-                                            />
-                                            <div className="text-sm">
-                                                <p className="font-semibold">{address.name}</p>
-                                                <p>{address.address}, {address.city}, {address.state} - {address.pincode}</p>
-                                                <p>Phone: {address.phone}</p>
-                                                <p>Email: {address.email}</p>
-                                            </div>
-                                        </label>
-                                    ))}
-                                </div>
-                            )}
 
-                            {/* Optionally, show input form for new address */}
-                            <div className="mt-4 border-t pt-4">
-                                <p className="text-sm font-medium mb-2">Or enter a new address:</p>
-                                {/* existing formData inputs go here (name, phone, etc.) */}
-                            </div>
-                        </div>
+
 
                         <div className='bg-white rounded-lg shadow-md overflow-hidden'>
-                            {/* Delivery Details */}
-                            <div
-                                className="flex justify-between items-center bg-gray-100 px-4 py-3 cursor-pointer"
-                                onClick={() => setIsDeliveryOpen(!isDeliveryOpen)}
-                            >
-                                <h3 className="text-lg font-semibold text-gray-700">
-                                    Delivery Details
-                                </h3>
-                                {isDeliveryOpen ? <FaMinus /> : <FaPlus />}
-                            </div>
 
-                            {isDeliveryOpen && (
-                                <div className="p-4 border-t">
-                                    {error && (
-                                        <div className="mb-3 p-2 bg-red-100 text-red-700 rounded text-sm">
-                                            {error}
-                                        </div>
-                                    )}
-                                    <div className="grid grid-cols-1 gap-3 mb-4">
-                                        {[
-                                            { name: 'name', label: 'Full Name', type: 'text' },
-                                            { name: 'phone', label: 'Phone Number', type: 'tel' },
-                                            { name: 'email', label: 'Email', type: 'email' },
-                                            { name: 'address', label: 'Address', type: 'text' },
-                                            { name: 'pincode', label: 'Pincode', type: 'text' },
-                                            { name: 'city', label: 'City', type: 'text' },
-                                            { name: 'state', label: 'State', type: 'text' }
-                                        ].map((field) => (
-                                            <div key={field.name}>
-                                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                                    {field.label}
-                                                </label>
-                                                <input
-                                                    type={field.type}
-                                                    name={field.name}
-                                                    value={formData[field.name]}
-                                                    onChange={handleInputChange}
-                                                    className="w-full p-2 border rounded text-sm"
-                                                    required
-                                                />
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            )}
 
                             {/* Order Summary */}
                             <div className='border-t border-gray-200 px-4 py-3'>
@@ -396,9 +272,9 @@ const Cart = () => {
                                 <button
                                     onClick={handlePayment}
                                     className={`w-full py-3 rounded font-medium text-white ${loading ? 'bg-gray-400' : 'bg-green-600 hover:bg-green-700'}`}
-                                    disabled={loading}
+
                                 >
-                                    {loading ? 'Processing...' : 'Proceed to Payment'}
+                                    Proceed to payment
                                 </button>
                             </div>
                         </div>

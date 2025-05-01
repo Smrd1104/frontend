@@ -32,8 +32,7 @@ router.post("/signup", userSignUpController)
 router.post("/signin", userSignInController)
 router.get("/user-details", authToken, userDetailsController)
 router.get("/userLogout", userLogout)
-router.post("/delivery", deliveryDetails);
-router.get("/delivery", authToken, getDeliveryDetails);
+
 
 
 

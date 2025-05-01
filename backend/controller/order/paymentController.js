@@ -1,10 +1,9 @@
 const stripe = require("../../config/stripe");
 const userModel = require("../../models/userModel");
-const deliveryModel = require("../../models/deliveryModel");
 
 const paymentController = async (request, response) => {
     try {
-        const { cartItems, shippingDetails } = request.body;
+        const { cartItems } = request.body;
 
         // Validate required fields
         if (!Array.isArray(cartItems) || cartItems.length === 0) {
@@ -14,38 +13,20 @@ const paymentController = async (request, response) => {
             });
         }
 
-        if (!shippingDetails || !shippingDetails.name || !shippingDetails.phone || !shippingDetails.email) {
-            return response.status(400).json({
-                message: "Shipping details are incomplete",
-                success: false
-            });
-        }
 
-        const requiredFields = ['name', 'phone', 'email', 'address', 'pincode', 'city', 'state'];
-        const missingFields = requiredFields.filter(field => !shippingDetails[field]);
 
-        if (missingFields.length > 0) {
-            return response.status(400).json({
-                message: `Missing required shipping fields: ${missingFields.join(', ')}`,
-                success: false
-            });
-        }
+
+
 
         // Check if user exists
         const user = await userModel.findOne({ _id: request.userId });
         if (!user) {
-            return response.status(404).json({ 
+            return response.status(404).json({
                 message: "User not found",
-                success: false 
+                success: false
             });
         }
 
-        // Save shipping details to the database
-        const deliveryDetails = new deliveryModel({
-            ...shippingDetails,
-            userId: request.userId
-        });
-        await deliveryDetails.save();
 
         const allowedOrigins = [
             "http://localhost:5173",
@@ -68,8 +49,6 @@ const paymentController = async (request, response) => {
             customer_email: user.email,
             metadata: {
                 userId: String(request.userId), // Ensure userId is a string
-                deliveryId: String(deliveryDetails._id), // Ensure deliveryId is a string
-                shippingDetails: JSON.stringify(shippingDetails)
             },
             line_items: cartItems.map(item => ({
                 price_data: {
@@ -96,9 +75,9 @@ const paymentController = async (request, response) => {
         const session = await stripe.checkout.sessions.create(params);
 
         // Return the session ID for the client to redirect to Stripe Checkout
-        response.status(200).json({ 
+        response.status(200).json({
             success: true,
-            id: session.id 
+            id: session.id
         });
 
     } catch (err) {

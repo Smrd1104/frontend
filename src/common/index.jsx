@@ -96,14 +96,7 @@ const summaryApi = {
         url: `${backendDomain}/api/all-order`,
         method: "GET"
     },
-    deliveryDetails: {
-        url: `${backendDomain}/api/delivery`,
-        method: "POST"
-    },
-    getSavedAddresses: {
-        url: `${backendDomain}/api/delivery`,
-        method: "GET"
-    },
+   
     // Add these new endpoints
     forgotPassword: {
         url: `${backendDomain}/api/forgot-password`,
