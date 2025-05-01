@@ -24,8 +24,6 @@ const { paymentController } = require('../controller/order/paymentController')
 const webhooks = require('../controller/order/webhook')
 const orderController = require('../controller/order/order.controller')
 const allOrderController = require('../controller/order/allorder.controller')
-const deliveryDetails = require('../controller/user/deliveryDetails')
-const getDeliveryDetails = require('../controller/user/getDeliveryDetails')
 const passwordController = require('../controller/passwordController')
 
 router.post("/signup", userSignUpController)
