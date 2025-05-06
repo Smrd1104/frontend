@@ -7,6 +7,7 @@ import { FaPlus, FaMinus } from 'react-icons/fa';
 import Context from "../context";
 import summaryApi from "../common";
 import displayINRCurrency from "../helpers/displayCurrency";
+import AddressSelection from '../components/AddressSelection';
 
 const Cart = () => {
     const [data, setData] = useState([]);
@@ -241,7 +242,7 @@ const Cart = () => {
                     <div className='mt-5 lg:mt-0 w-full max-w-sm'>
 
 
-
+                        <AddressSelection />
 
                         <div className='bg-white rounded-lg shadow-md overflow-hidden'>
 

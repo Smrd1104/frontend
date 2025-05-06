@@ -1,33 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import summaryApi from '../common';
 
 const AddressSelection = () => {
-  const [savedAddresses, setSavedAddresses] = useState([
-    {
-      _id: '1',
-      name: 'John Doe',
-      phone: '9876543210',
-      email: 'john@example.com',
-      address: '123 Main Street',
-      pincode: '123456',
-      city: 'New York',
-      state: 'NY',
-      country: 'India',
-    },
-    {
-      _id: '2',
-      name: 'Jane Smith',
-      phone: '9876543221',
-      email: 'jane@example.com',
-      address: '456 Elm Street',
-      pincode: '654321',
-      city: 'Los Angeles',
-      state: 'CA',
-      country: 'India',
-    },
-  ]);
-
+  const [savedAddresses, setSavedAddresses] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState('');
   const [isAddNewOpen, setIsAddNewOpen] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [addressToDelete, setAddressToDelete] = useState(null);
+
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -41,6 +21,23 @@ const AddressSelection = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
+
+
+  useEffect(() => {
+    // Fetch all addresses when the component mounts
+    const fetchAddresses = async () => {
+      try {
+        const response = await fetch(summaryApi.getAllAddresses.url);
+        const data = await response.json();
+        setSavedAddresses(data);
+      } catch (error) {
+        console.error('Error fetching addresses:', error);
+      }
+    };
+
+    fetchAddresses();
+  }, []);
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -48,38 +45,56 @@ const AddressSelection = () => {
       [name]: value,
     }));
   };
+  const handleSaveNewAddress = async () => {
+    const requestOptions = {
+      method: isEditing ? 'PUT' : 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    };
 
-  const handleSaveNewAddress = () => {
-    if (isEditing && editingId) {
-      setSavedAddresses((prev) =>
-        prev.map((addr) =>
-          addr._id === editingId ? { ...formData, _id: editingId } : addr
-        )
-      );
-      setSelectedAddressId(editingId);
-    } else {
-      const newAddress = {
-        ...formData,
-        _id: Date.now().toString(),
-      };
-      setSavedAddresses([...savedAddresses, newAddress]);
-      setSelectedAddressId(newAddress._id);
+    try {
+      let response;
+
+      if (isEditing && editingId) {
+        // Corrected: use updateAddress with ID
+        response = await fetch(summaryApi.updateAddress(editingId).url, requestOptions);
+      } else {
+        response = await fetch(summaryApi.addAddress.url, requestOptions);
+      }
+
+      if (response.ok) {
+        const updatedAddress = await response.json();
+
+        if (isEditing) {
+          setSavedAddresses((prev) =>
+            prev.map((addr) => (addr._id === editingId ? updatedAddress : addr))
+          );
+        } else {
+          setSavedAddresses((prev) => [...prev, updatedAddress]);
+        }
+
+        setSelectedAddressId(updatedAddress._id);
+        setIsAddNewOpen(false);
+        setIsEditing(false);
+        setEditingId(null);
+        setFormData({
+          name: '',
+          phone: '',
+          email: '',
+          address: '',
+          pincode: '',
+          city: '',
+          state: '',
+          country: 'India',
+        });
+      } else {
+        console.error('Error saving address:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error saving address:', error);
     }
-
-    setIsAddNewOpen(false);
-    setIsEditing(false);
-    setEditingId(null);
-    setFormData({
-      name: '',
-      phone: '',
-      email: '',
-      address: '',
-      pincode: '',
-      city: '',
-      state: '',
-      country: 'India',
-    });
   };
+
 
   const handleEditAddress = (address) => {
     setFormData(address);
@@ -87,6 +102,23 @@ const AddressSelection = () => {
     setIsEditing(true);
     setEditingId(address._id);
   };
+
+  const handleDeleteAddress = async (id) => {
+    try {
+      const response = await fetch(summaryApi.deleteAddress(id).url, {
+        method: 'DELETE',
+      });
+
+      if (response.ok) {
+        setSavedAddresses((prev) => prev.filter((addr) => addr._id !== id));
+      } else {
+        console.error('Error deleting address:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error deleting address:', error);
+    }
+  };
+
 
   return (
     <div className="max-w-3xl mx-auto p-6">
@@ -107,9 +139,7 @@ const AddressSelection = () => {
                 name="selectedAddress"
                 value={address._id}
                 checked={selectedAddressId === address._id}
-                onChange={() => {
-                  setSelectedAddressId(address._id);
-                }}
+                onChange={() => setSelectedAddressId(address._id)}
                 className="mt-1"
               />
               <div>
@@ -122,12 +152,24 @@ const AddressSelection = () => {
             </label>
 
             {selectedAddressId === address._id && (
-              <button
-                className="absolute top-2 right-2 text-blue-600 hover:text-blue-800"
-                onClick={() => handleEditAddress(address)}
-              >
-                ✏️
-              </button>
+              <div>
+                <button
+                  className="absolute top-2 right-8 text-blue-600 hover:text-blue-800"
+                  onClick={() => handleEditAddress(address)}
+                >
+                  ✏️
+                </button>
+                <button
+                  className="absolute top-2 right-2 text-red-600 hover:text-red-800"
+                  onClick={() => {
+                    setAddressToDelete(address._id);
+                    setShowDeletePopup(true);
+                  }}
+                >
+                  🗑️
+                </button>
+
+              </div>
             )}
           </div>
         ))}
@@ -228,7 +270,6 @@ const AddressSelection = () => {
                 placeholder="State"
                 className="border p-2 rounded w-full"
               />
-
             </div>
 
             <textarea
@@ -249,6 +290,41 @@ const AddressSelection = () => {
           </div>
         </div>
       )}
+
+      {/* delete popup */}
+      {showDeletePopup && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
+          <div className="bg-white p-6 rounded-md w-full max-w-sm relative">
+            <button
+              className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+              onClick={() => setShowDeletePopup(false)}
+            >
+              ✖
+            </button>
+            <h3 className="text-lg font-semibold mb-4">Confirm Delete</h3>
+            <p>Are you sure you want to delete this address?</p>
+            <div className="flex justify-end gap-4 mt-6">
+              <button
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                onClick={() => setShowDeletePopup(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
+                onClick={async () => {
+                  await handleDeleteAddress(addressToDelete);
+                  setShowDeletePopup(false);
+                  setAddressToDelete(null);
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };

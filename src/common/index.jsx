@@ -109,7 +109,39 @@ const summaryApi = {
     resetPassword: {
         url: `${backendDomain}/api/reset-password`,
         method: "POST"
-    }
+    },
+
+
+        // Get all addresses
+        getAllAddresses: {
+            url: `${backendDomain}/api/addresses`,
+            method: "GET"
+        },
+        
+        // Get a specific address by ID
+        getAddressById: (id) => ({
+            url: `${backendDomain}/api/addresses/${id}`,
+            method: "GET"
+        }),
+    
+        // Add a new address
+        addAddress: {
+            url: `${backendDomain}/api/addresses`,
+            method: "POST"
+        },
+    
+        // Update an address
+        updateAddress: (id) => ({
+            url: `${backendDomain}/api/addresses/${id}`,
+            method: "PUT"
+        }),
+    
+        // Delete an address
+        deleteAddress: (id) => ({
+            url: `${backendDomain}/api/addresses/${id}`,
+            method: "DELETE"
+        })
+    
 
 
 

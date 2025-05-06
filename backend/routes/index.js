@@ -25,6 +25,7 @@ const webhooks = require('../controller/order/webhook')
 const orderController = require('../controller/order/order.controller')
 const allOrderController = require('../controller/order/allorder.controller')
 const passwordController = require('../controller/passwordController')
+const addressController = require('../controller/addressController')
 
 router.post("/signup", userSignUpController)
 router.post("/signin", userSignInController)
@@ -77,6 +78,27 @@ router.post('/verify-otp', passwordController.verifyOtp);
 
 // Reset password
 router.post('/reset-password', passwordController.resetPassword);
+
+
+
+// Get all addresses
+router.get('/addresses', addressController.getAllAddresses);
+
+// Get a specific address by ID
+router.get('/addresses/:id', addressController.getAddressById);
+
+// Add a new address
+router.post('/addresses', addressController.addAddress);
+
+// Update an address
+router.put('/addresses/:id', addressController.updateAddress);
+
+// Delete an address
+router.delete('/addresses/:id', addressController.deleteAddress);
+
+
+console.log("Address routes loaded:", addressController);
+
 
 
 
