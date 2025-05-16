@@ -9,6 +9,7 @@ const AddressSelection = () => {
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [addressToDelete, setAddressToDelete] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isSectionOpen, setIsSectionOpen] = useState(true); // 🔁 Toggle section
 
 
   const [formData, setFormData] = useState({
@@ -21,6 +22,26 @@ const AddressSelection = () => {
     state: '',
     country: 'India',
   });
+
+  const validateForm = () => {
+    const { name, phone, email, address, pincode, city, state } = formData;
+
+    // Regex patterns
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[6-9]\d{9}$/; // Indian phone numbers
+    const pincodeRegex = /^\d{6}$/;
+
+    if (!name.trim()) return "Name is required";
+    if (!phoneRegex.test(phone)) return "Invalid phone number (10 digits, starts with 6-9)";
+    if (!emailRegex.test(email)) return "Invalid email format";
+    if (!address.trim()) return "Address is required";
+    if (!pincodeRegex.test(pincode)) return "Pincode must be 6 digits";
+    if (!city.trim()) return "City is required";
+    if (!state.trim()) return "State is required";
+
+    return null; // All validations passed
+  };
+
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
@@ -67,6 +88,12 @@ const AddressSelection = () => {
   };
 
   const handleSaveNewAddress = async () => {
+
+    const errorMessage = validateForm();
+    if (errorMessage) {
+      toast.error(errorMessage);
+      return;
+    }
     try {
       setIsLoading(true);
       const requestOptions = {
@@ -166,95 +193,113 @@ const AddressSelection = () => {
     }
   };
 
+
+
   return (
     <div className="max-w-3xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Select Delivery Address</h2>
-
-      {isLoading && !isAddNewOpen && !showDeletePopup && (
-        <div className="text-center py-4">Loading addresses...</div>
-      )}
-
-      {/* Saved Addresses */}
-      <div className="space-y-4">
-        {savedAddresses.length === 0 && !isLoading ? (
-          <div className="text-center py-4 text-gray-500">
-            No saved addresses found. Please add an address.
-          </div>
-        ) : (
-          savedAddresses.map((address) => (
-            <div key={address._id} className="relative">
-              <label
-                className={`flex items-start gap-4 border p-4 rounded-md cursor-pointer ${selectedAddressId === address._id
-                  ? 'border-blue-500 bg-blue-100'
-                  : 'border-gray-300'
-                  }`}
-              >
-                <input
-                  type="radio"
-                  name="selectedAddress"
-                  value={address._id}
-                  checked={selectedAddressId === address._id}
-                  onChange={() => setSelectedAddressId(address._id)}
-                  className="mt-1"
-                />
-                <div>
-                  <p className="font-semibold">{address.name}</p>
-                  <p>{address.address}, {address.city}, {address.state} - {address.pincode}</p>
-                  <p>Phone: {address.phone}</p>
-                  <p>Email: {address.email}</p>
-                  <p>Country: {address.country}</p>
-                </div>
-              </label>
-
-              {selectedAddressId === address._id && (
-                <div>
-                  <button
-                    className="absolute top-2 right-8 text-blue-600 hover:text-blue-800"
-                    onClick={() => handleEditAddress(address)}
-                    disabled={isLoading}
-                  >
-                    ✏️
-                  </button>
-                  <button
-                    className="absolute top-2 right-2 text-red-600 hover:text-red-800"
-                    onClick={() => {
-                      setAddressToDelete(address._id);
-                      setShowDeletePopup(true);
-                    }}
-                    disabled={isLoading}
-                  >
-                    🗑️
-                  </button>
-                </div>
-              )}
-            </div>
-          ))
-        )}
-      </div>
-
-      {/* Add New Address Button */}
-      <div className="mt-6">
+      {/* Header with toggle */}
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-2xl font-bold">Select Delivery Address</h2>
         <button
-          className="text-blue-600 font-medium hover:underline"
-          onClick={() => {
-            setIsAddNewOpen(true);
-            setIsEditing(false);
-            setFormData({
-              name: '',
-              phone: '',
-              email: '',
-              address: '',
-              pincode: '',
-              city: '',
-              state: '',
-              country: 'India',
-            });
-          }}
-          disabled={isLoading}
+          onClick={() => setIsSectionOpen((prev) => !prev)}
+          className="text-xl font-bold px-2 text-blue-600"
         >
-          + Add New Address
+          {isSectionOpen ? '−' : '+'}
         </button>
       </div>
+      {/* Section that can be toggled */}
+      {isSectionOpen && (
+
+
+        <div>
+          {isLoading && !isAddNewOpen && !showDeletePopup && (
+            <div className="text-center py-4">Loading addresses...</div>
+          )}
+
+          {/* Saved Addresses */}
+          <div className="space-y-4">
+            {savedAddresses.length === 0 && !isLoading ? (
+              <div className="text-center py-4 text-gray-500">
+                No saved addresses found. Please add an address.
+              </div>
+            ) : (
+              savedAddresses.map((address) => (
+                <div key={address._id} className="relative">
+                  <label
+                    className={`flex items-start gap-4 border p-4 rounded-md cursor-pointer ${selectedAddressId === address._id
+                      ? 'border-blue-500 bg-blue-100'
+                      : 'border-gray-300'
+                      }`}
+                  >
+                    <input
+                      type="radio"
+                      name="selectedAddress"
+                      value={address._id}
+                      checked={selectedAddressId === address._id}
+                      onChange={() => setSelectedAddressId(address._id)}
+                      className="mt-1"
+                    />
+                    <div>
+                      <p className="font-semibold">{address.name}</p>
+                      <p>{address.address}, {address.city}, {address.state} - {address.pincode}</p>
+                      <p>Phone: {address.phone}</p>
+                      <p>Email: {address.email}</p>
+                      <p>Country: {address.country}</p>
+                    </div>
+                  </label>
+
+                  {selectedAddressId === address._id && (
+                    <div>
+                      <button
+                        className="absolute top-2 right-8 text-blue-600 hover:text-blue-800"
+                        onClick={() => handleEditAddress(address)}
+                        disabled={isLoading}
+                      >
+                        ✏️
+                      </button>
+                      <button
+                        className="absolute top-2 right-2 text-red-600 hover:text-red-800"
+                        onClick={() => {
+                          setAddressToDelete(address._id);
+                          setShowDeletePopup(true);
+                        }}
+                        disabled={isLoading}
+                      >
+                        🗑️
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Add New Address Button */}
+          <div className="mt-6">
+            <button
+              className="text-blue-600 font-medium hover:underline"
+              onClick={() => {
+                setIsAddNewOpen(true);
+                setIsEditing(false);
+                setFormData({
+                  name: '',
+                  phone: '',
+                  email: '',
+                  address: '',
+                  pincode: '',
+                  city: '',
+                  state: '',
+                  country: 'India',
+                });
+              }}
+              disabled={isLoading}
+            >
+              + Add New Address
+            </button>
+          </div>
+
+        </div>
+      )}
 
       {/* Add/Edit Address Popup */}
       {isAddNewOpen && (

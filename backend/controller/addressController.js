@@ -1,5 +1,5 @@
-// controllers/addressController.js
 const Address = require('../models/address');
+const { addressValidationSchema } = require('../validations/addressValidation');
 
 // Get all addresses for the current user
 const getAllAddresses = async (req, res) => {
@@ -27,6 +27,11 @@ const getAddressById = async (req, res) => {
 
 // Add a new address for the current user
 const addAddress = async (req, res) => {
+    const { error } = addressValidationSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+    }
+
     const { name, phone, email, address, pincode, city, state, country } = req.body;
 
     const newAddress = new Address({
@@ -51,6 +56,11 @@ const addAddress = async (req, res) => {
 
 // Update an address (only if it belongs to the current user)
 const updateAddress = async (req, res) => {
+    const { error } = addressValidationSchema.validate(req.body);
+    if (error) {
+        return res.status(400).json({ message: error.details[0].message });
+    }
+
     const { id } = req.params;
     const { name, phone, email, address, pincode, city, state, country } = req.body;
 
