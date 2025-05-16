@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import summaryApi from '../common';
+import { toast } from 'react-toastify';
 
 const AddressSelection = () => {
   const [savedAddresses, setSavedAddresses] = useState([]);
@@ -7,6 +8,8 @@ const AddressSelection = () => {
   const [isAddNewOpen, setIsAddNewOpen] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [addressToDelete, setAddressToDelete] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
 
   const [formData, setFormData] = useState({
     name: '',
@@ -21,22 +24,39 @@ const AddressSelection = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingId, setEditingId] = useState(null);
 
-
-
   useEffect(() => {
-    // Fetch all addresses when the component mounts
-    const fetchAddresses = async () => {
-      try {
-        const response = await fetch(summaryApi.getAllAddresses.url);
-        const data = await response.json();
-        setSavedAddresses(data);
-      } catch (error) {
-        console.error('Error fetching addresses:', error);
-      }
-    };
-
     fetchAddresses();
   }, []);
+
+  const fetchAddresses = async () => {
+    try {
+      setIsLoading(true);
+      const response = await fetch(summaryApi.getAllAddresses.url, {
+        method: summaryApi.getAllAddresses.method,
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setSavedAddresses(data);
+        // Select the first address by default if none is selected
+        if (data.length > 0 && !selectedAddressId) {
+          setSelectedAddressId(data[0]._id);
+        }
+      } else {
+        toast.error(data.message || 'Error fetching addresses');
+      }
+    } catch (error) {
+      console.error('Error fetching addresses:', error);
+      toast.error('Error fetching addresses');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -45,14 +65,18 @@ const AddressSelection = () => {
       [name]: value,
     }));
   };
-  const handleSaveNewAddress = async () => {
-    const requestOptions = {
-      method: isEditing ? 'PUT' : 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    };
 
+  const handleSaveNewAddress = async () => {
     try {
+      setIsLoading(true);
+      const requestOptions = {
+        method: isEditing ? 'PUT' : 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      };
+
+
       let response;
 
       if (isEditing && editingId) {
@@ -62,18 +86,13 @@ const AddressSelection = () => {
         response = await fetch(summaryApi.addAddress.url, requestOptions);
       }
 
+      const data = await response.json();
+
+
+
       if (response.ok) {
-        const updatedAddress = await response.json();
-
-        if (isEditing) {
-          setSavedAddresses((prev) =>
-            prev.map((addr) => (addr._id === editingId ? updatedAddress : addr))
-          );
-        } else {
-          setSavedAddresses((prev) => [...prev, updatedAddress]);
-        }
-
-        setSelectedAddressId(updatedAddress._id);
+        toast.success(data.message || (isEditing ? 'Address updated successfully' : 'Address added successfully'));
+        await fetchAddresses(); // Refresh the addresses list
         setIsAddNewOpen(false);
         setIsEditing(false);
         setEditingId(null);
@@ -88,16 +107,27 @@ const AddressSelection = () => {
           country: 'India',
         });
       } else {
-        console.error('Error saving address:', response.statusText);
+        toast.error(data.message || (isEditing ? 'Error updating address' : 'Error adding address'));
       }
     } catch (error) {
       console.error('Error saving address:', error);
+      toast.error('Error saving address');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-
   const handleEditAddress = (address) => {
-    setFormData(address);
+    setFormData({
+      name: address.name,
+      phone: address.phone,
+      email: address.email,
+      address: address.address,
+      pincode: address.pincode,
+      city: address.city,
+      state: address.state,
+      country: address.country || 'India',
+    });
     setIsAddNewOpen(true);
     setIsEditing(true);
     setEditingId(address._id);
@@ -105,74 +135,101 @@ const AddressSelection = () => {
 
   const handleDeleteAddress = async (id) => {
     try {
+      setIsLoading(true);
       const response = await fetch(summaryApi.deleteAddress(id).url, {
         method: 'DELETE',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-        setSavedAddresses((prev) => prev.filter((addr) => addr._id !== id));
+        toast.success(data.message || 'Address deleted successfully');
+        await fetchAddresses(); // Refresh the addresses list
+        // If we deleted the selected address, clear the selection
+        if (selectedAddressId === id) {
+          setSelectedAddressId('');
+        }
       } else {
-        console.error('Error deleting address:', response.statusText);
+        toast.error(data.message || 'Error deleting address');
       }
     } catch (error) {
       console.error('Error deleting address:', error);
+      toast.error('Error deleting address');
+    } finally {
+      setIsLoading(false);
+      setShowDeletePopup(false);
+      setAddressToDelete(null);
     }
   };
-
 
   return (
     <div className="max-w-3xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-4">Select Delivery Address</h2>
 
+      {isLoading && !isAddNewOpen && !showDeletePopup && (
+        <div className="text-center py-4">Loading addresses...</div>
+      )}
+
       {/* Saved Addresses */}
       <div className="space-y-4">
-        {savedAddresses.map((address) => (
-          <div key={address._id} className="relative">
-            <label
-              className={`flex items-start gap-4 border p-4 rounded-md cursor-pointer ${selectedAddressId === address._id
-                ? 'border-blue-500 bg-blue-100'
-                : 'border-gray-300'
-                }`}
-            >
-              <input
-                type="radio"
-                name="selectedAddress"
-                value={address._id}
-                checked={selectedAddressId === address._id}
-                onChange={() => setSelectedAddressId(address._id)}
-                className="mt-1"
-              />
-              <div>
-                <p className="font-semibold">{address.name}</p>
-                <p>{address.address}, {address.city}, {address.state} - {address.pincode}</p>
-                <p>Phone: {address.phone}</p>
-                <p>Email: {address.email}</p>
-                <p>Country: {address.country}</p>
-              </div>
-            </label>
-
-            {selectedAddressId === address._id && (
-              <div>
-                <button
-                  className="absolute top-2 right-8 text-blue-600 hover:text-blue-800"
-                  onClick={() => handleEditAddress(address)}
-                >
-                  ✏️
-                </button>
-                <button
-                  className="absolute top-2 right-2 text-red-600 hover:text-red-800"
-                  onClick={() => {
-                    setAddressToDelete(address._id);
-                    setShowDeletePopup(true);
-                  }}
-                >
-                  🗑️
-                </button>
-
-              </div>
-            )}
+        {savedAddresses.length === 0 && !isLoading ? (
+          <div className="text-center py-4 text-gray-500">
+            No saved addresses found. Please add an address.
           </div>
-        ))}
+        ) : (
+          savedAddresses.map((address) => (
+            <div key={address._id} className="relative">
+              <label
+                className={`flex items-start gap-4 border p-4 rounded-md cursor-pointer ${selectedAddressId === address._id
+                  ? 'border-blue-500 bg-blue-100'
+                  : 'border-gray-300'
+                  }`}
+              >
+                <input
+                  type="radio"
+                  name="selectedAddress"
+                  value={address._id}
+                  checked={selectedAddressId === address._id}
+                  onChange={() => setSelectedAddressId(address._id)}
+                  className="mt-1"
+                />
+                <div>
+                  <p className="font-semibold">{address.name}</p>
+                  <p>{address.address}, {address.city}, {address.state} - {address.pincode}</p>
+                  <p>Phone: {address.phone}</p>
+                  <p>Email: {address.email}</p>
+                  <p>Country: {address.country}</p>
+                </div>
+              </label>
+
+              {selectedAddressId === address._id && (
+                <div>
+                  <button
+                    className="absolute top-2 right-8 text-blue-600 hover:text-blue-800"
+                    onClick={() => handleEditAddress(address)}
+                    disabled={isLoading}
+                  >
+                    ✏️
+                  </button>
+                  <button
+                    className="absolute top-2 right-2 text-red-600 hover:text-red-800"
+                    onClick={() => {
+                      setAddressToDelete(address._id);
+                      setShowDeletePopup(true);
+                    }}
+                    disabled={isLoading}
+                  >
+                    🗑️
+                  </button>
+                </div>
+              )}
+            </div>
+          ))
+        )}
       </div>
 
       {/* Add New Address Button */}
@@ -193,6 +250,7 @@ const AddressSelection = () => {
               country: 'India',
             });
           }}
+          disabled={isLoading}
         >
           + Add New Address
         </button>
@@ -202,18 +260,20 @@ const AddressSelection = () => {
       {isAddNewOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-md w-full max-w-lg relative">
-            {/* Close button */}
             <button
               className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
               onClick={() => {
                 setIsAddNewOpen(false);
                 setIsEditing(false);
               }}
+              disabled={isLoading}
             >
               ✖
             </button>
 
-            <h3 className="text-xl font-bold mb-4">{isEditing ? 'Edit Address' : 'Add New Address'}</h3>
+            <h3 className="text-xl font-bold mb-4">
+              {isEditing ? 'Edit Address' : 'Add New Address'}
+            </h3>
             <input
               type="text"
               name="country"
@@ -229,6 +289,7 @@ const AddressSelection = () => {
                 onChange={handleInputChange}
                 placeholder="Full Name"
                 className="border p-2 rounded w-full"
+                disabled={isLoading}
               />
               <input
                 type="text"
@@ -237,6 +298,7 @@ const AddressSelection = () => {
                 onChange={handleInputChange}
                 placeholder="Phone Number"
                 className="border p-2 rounded w-full"
+                disabled={isLoading}
               />
               <input
                 type="email"
@@ -245,6 +307,7 @@ const AddressSelection = () => {
                 onChange={handleInputChange}
                 placeholder="Email Address"
                 className="border p-2 rounded w-full"
+                disabled={isLoading}
               />
               <input
                 type="text"
@@ -253,6 +316,7 @@ const AddressSelection = () => {
                 onChange={handleInputChange}
                 placeholder="Pincode"
                 className="border p-2 rounded w-full"
+                disabled={isLoading}
               />
               <input
                 type="text"
@@ -261,6 +325,7 @@ const AddressSelection = () => {
                 onChange={handleInputChange}
                 placeholder="City"
                 className="border p-2 rounded w-full"
+                disabled={isLoading}
               />
               <input
                 type="text"
@@ -269,6 +334,7 @@ const AddressSelection = () => {
                 onChange={handleInputChange}
                 placeholder="State"
                 className="border p-2 rounded w-full"
+                disabled={isLoading}
               />
             </div>
 
@@ -279,25 +345,28 @@ const AddressSelection = () => {
               onChange={handleInputChange}
               placeholder="Full Address"
               className="border p-2 rounded w-full mt-4"
+              disabled={isLoading}
             ></textarea>
 
             <button
-              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full"
+              className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full disabled:bg-blue-400"
               onClick={handleSaveNewAddress}
+              disabled={isLoading}
             >
-              {isEditing ? 'Update Address' : 'Save Address'}
+              {isLoading ? 'Processing...' : isEditing ? 'Update Address' : 'Save Address'}
             </button>
           </div>
         </div>
       )}
 
-      {/* delete popup */}
+      {/* Delete popup */}
       {showDeletePopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
           <div className="bg-white p-6 rounded-md w-full max-w-sm relative">
             <button
               className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
               onClick={() => setShowDeletePopup(false)}
+              disabled={isLoading}
             >
               ✖
             </button>
@@ -305,26 +374,23 @@ const AddressSelection = () => {
             <p>Are you sure you want to delete this address?</p>
             <div className="flex justify-end gap-4 mt-6">
               <button
-                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 disabled:bg-gray-100"
                 onClick={() => setShowDeletePopup(false)}
+                disabled={isLoading}
               >
                 Cancel
               </button>
               <button
-                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700"
-                onClick={async () => {
-                  await handleDeleteAddress(addressToDelete);
-                  setShowDeletePopup(false);
-                  setAddressToDelete(null);
-                }}
+                className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:bg-red-400"
+                onClick={() => handleDeleteAddress(addressToDelete)}
+                disabled={isLoading}
               >
-                Delete
+                {isLoading ? 'Deleting...' : 'Delete'}
               </button>
             </div>
           </div>
         </div>
       )}
-
     </div>
   );
 };

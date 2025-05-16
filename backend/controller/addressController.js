@@ -1,22 +1,21 @@
 // controllers/addressController.js
-
 const Address = require('../models/address');
 
-// Get all addresses
+// Get all addresses for the current user
 const getAllAddresses = async (req, res) => {
     try {
-        const addresses = await Address.find();
+        const addresses = await Address.find({ user: req.userId });
         res.status(200).json(addresses);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching addresses', error });
     }
 };
 
-// Get a specific address by ID
+// Get a specific address by ID (only if it belongs to the current user)
 const getAddressById = async (req, res) => {
     const { id } = req.params;
     try {
-        const address = await Address.findById(id);
+        const address = await Address.findOne({ _id: id, user: req.userId });
         if (!address) {
             return res.status(404).json({ message: 'Address not found' });
         }
@@ -26,11 +25,12 @@ const getAddressById = async (req, res) => {
     }
 };
 
-// Add a new address
+// Add a new address for the current user
 const addAddress = async (req, res) => {
     const { name, phone, email, address, pincode, city, state, country } = req.body;
 
     const newAddress = new Address({
+        user: req.userId,
         name,
         phone,
         email,
@@ -49,14 +49,14 @@ const addAddress = async (req, res) => {
     }
 };
 
-// Update an address
+// Update an address (only if it belongs to the current user)
 const updateAddress = async (req, res) => {
     const { id } = req.params;
     const { name, phone, email, address, pincode, city, state, country } = req.body;
 
     try {
-        const updatedAddress = await Address.findByIdAndUpdate(
-            id,
+        const updatedAddress = await Address.findOneAndUpdate(
+            { _id: id, user: req.userId },
             { name, phone, email, address, pincode, city, state, country },
             { new: true }
         );
@@ -71,12 +71,12 @@ const updateAddress = async (req, res) => {
     }
 };
 
-// Delete an address
+// Delete an address (only if it belongs to the current user)
 const deleteAddress = async (req, res) => {
     const { id } = req.params;
 
     try {
-        const deletedAddress = await Address.findByIdAndDelete(id);
+        const deletedAddress = await Address.findOneAndDelete({ _id: id, user: req.userId });
 
         if (!deletedAddress) {
             return res.status(404).json({ message: 'Address not found' });

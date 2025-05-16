@@ -82,22 +82,22 @@ router.post('/reset-password', passwordController.resetPassword);
 
 
 // Get all addresses
-router.get('/addresses', addressController.getAllAddresses);
+router.get('/addresses',authToken, addressController.getAllAddresses);
 
 // Get a specific address by ID
-router.get('/addresses/:id', addressController.getAddressById);
+router.get('/addresses/:id',authToken, addressController.getAddressById);
 
 // Add a new address
-router.post('/addresses', addressController.addAddress);
+router.post('/addresses', authToken,addressController.addAddress);
 
 // Update an address
-router.put('/addresses/:id', addressController.updateAddress);
+router.put('/addresses/:id',authToken, addressController.updateAddress);
 
 // Delete an address
-router.delete('/addresses/:id', addressController.deleteAddress);
+router.delete('/addresses/:id',authToken, addressController.deleteAddress);
 
 
-console.log("Address routes loaded:", addressController);
+console.log("Address routes loaded:",authToken, addressController);
 
 
 
