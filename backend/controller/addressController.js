@@ -1,7 +1,6 @@
 const Address = require('../models/address');
 const { addressValidationSchema } = require('../validations/addressValidation');
 
-// Get all addresses for the current user
 const getAllAddresses = async (req, res) => {
     try {
         const addresses = await Address.find({ user: req.userId });
@@ -11,7 +10,6 @@ const getAllAddresses = async (req, res) => {
     }
 };
 
-// Get a specific address by ID (only if it belongs to the current user)
 const getAddressById = async (req, res) => {
     const { id } = req.params;
     try {
@@ -25,7 +23,6 @@ const getAddressById = async (req, res) => {
     }
 };
 
-// Add a new address for the current user
 const addAddress = async (req, res) => {
     const { error } = addressValidationSchema.validate(req.body);
     if (error) {
@@ -54,7 +51,6 @@ const addAddress = async (req, res) => {
     }
 };
 
-// Update an address (only if it belongs to the current user)
 const updateAddress = async (req, res) => {
     const { error } = addressValidationSchema.validate(req.body);
     if (error) {
@@ -81,7 +77,6 @@ const updateAddress = async (req, res) => {
     }
 };
 
-// Delete an address (only if it belongs to the current user)
 const deleteAddress = async (req, res) => {
     const { id } = req.params;
 

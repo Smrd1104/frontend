@@ -3,9 +3,8 @@ const userModel = require("../../models/userModel");
 
 const paymentController = async (request, response) => {
     try {
-        const { cartItems } = request.body;
+        const { cartItems, shippingAddress } = request.body;
 
-        // Validate required fields
         if (!Array.isArray(cartItems) || cartItems.length === 0) {
             return response.status(400).json({
                 message: "Cart items are required and must be a non-empty array",
@@ -13,12 +12,23 @@ const paymentController = async (request, response) => {
             });
         }
 
+        if (!shippingAddress) {
+            return response.status(400).json({
+                message: "Shipping address is required",
+                success: false
+            });
+        }
 
+        const requiredFields = ['name', 'phone', 'address', 'pincode', 'city', 'state'];
+        for (const field of requiredFields) {
+            if (!shippingAddress[field]) {
+                return response.status(400).json({
+                    message: `Shipping address ${field} is required`,
+                    success: false
+                });
+            }
+        }
 
-
-
-
-        // Check if user exists
         const user = await userModel.findOne({ _id: request.userId });
         if (!user) {
             return response.status(404).json({
@@ -26,7 +36,6 @@ const paymentController = async (request, response) => {
                 success: false
             });
         }
-
 
         const allowedOrigins = [
             "http://localhost:5173",
@@ -48,7 +57,8 @@ const paymentController = async (request, response) => {
             ],
             customer_email: user.email,
             metadata: {
-                userId: String(request.userId), // Ensure userId is a string
+                userId: String(request.userId),
+                shippingAddress: JSON.stringify(shippingAddress)
             },
             line_items: cartItems.map(item => ({
                 price_data: {
@@ -60,7 +70,7 @@ const paymentController = async (request, response) => {
                             : [item.productId.productImage],
                         metadata: { productId: item.productId._id }
                     },
-                    unit_amount: item.productId.sellingPrice * 100, // Amount in paise (INR)
+                    unit_amount: item.productId.sellingPrice * 100,
                 },
                 adjustable_quantity: {
                     enabled: true,
@@ -74,7 +84,6 @@ const paymentController = async (request, response) => {
 
         const session = await stripe.checkout.sessions.create(params);
 
-        // Return the session ID for the client to redirect to Stripe Checkout
         response.status(200).json({
             success: true,
             id: session.id

@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import summaryApi from '../common';
 import { toast } from 'react-toastify';
+import summaryApi from '../common';
 
-const AddressSelection = () => {
-  const [savedAddresses, setSavedAddresses] = useState([]);
-  const [selectedAddressId, setSelectedAddressId] = useState('');
+const AddressSelection = ({
+  savedAddresses,
+  setSavedAddresses,
+  selectedAddressId,
+  setSelectedAddressId,
+  fetchSavedAddresses
+}) => {
   const [isAddNewOpen, setIsAddNewOpen] = useState(false);
   const [showDeletePopup, setShowDeletePopup] = useState(false);
   const [addressToDelete, setAddressToDelete] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSectionOpen, setIsSectionOpen] = useState(true); // 🔁 Toggle section
-
+  const [isSectionOpen, setIsSectionOpen] = useState(true);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -23,12 +26,13 @@ const AddressSelection = () => {
     country: 'India',
   });
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [editingId, setEditingId] = useState(null);
+
   const validateForm = () => {
     const { name, phone, email, address, pincode, city, state } = formData;
-
-    // Regex patterns
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^[6-9]\d{9}$/; // Indian phone numbers
+    const phoneRegex = /^[6-9]\d{9}$/;
     const pincodeRegex = /^\d{6}$/;
 
     if (!name.trim()) return "Name is required";
@@ -39,61 +43,21 @@ const AddressSelection = () => {
     if (!city.trim()) return "City is required";
     if (!state.trim()) return "State is required";
 
-    return null; // All validations passed
-  };
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [editingId, setEditingId] = useState(null);
-
-  useEffect(() => {
-    fetchAddresses();
-  }, []);
-
-  const fetchAddresses = async () => {
-    try {
-      setIsLoading(true);
-      const response = await fetch(summaryApi.getAllAddresses.url, {
-        method: summaryApi.getAllAddresses.method,
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setSavedAddresses(data);
-        // Select the first address by default if none is selected
-        if (data.length > 0 && !selectedAddressId) {
-          setSelectedAddressId(data[0]._id);
-        }
-      } else {
-        toast.error(data.message || 'Error fetching addresses');
-      }
-    } catch (error) {
-      console.error('Error fetching addresses:', error);
-      toast.error('Error fetching addresses');
-    } finally {
-      setIsLoading(false);
-    }
+    return null;
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
   const handleSaveNewAddress = async () => {
-
     const errorMessage = validateForm();
     if (errorMessage) {
       toast.error(errorMessage);
       return;
     }
+
     try {
       setIsLoading(true);
       const requestOptions = {
@@ -103,11 +67,8 @@ const AddressSelection = () => {
         body: JSON.stringify(formData),
       };
 
-
       let response;
-
       if (isEditing && editingId) {
-        // Corrected: use updateAddress with ID
         response = await fetch(summaryApi.updateAddress(editingId).url, requestOptions);
       } else {
         response = await fetch(summaryApi.addAddress.url, requestOptions);
@@ -115,11 +76,9 @@ const AddressSelection = () => {
 
       const data = await response.json();
 
-
-
       if (response.ok) {
         toast.success(data.message || (isEditing ? 'Address updated successfully' : 'Address added successfully'));
-        await fetchAddresses(); // Refresh the addresses list
+        fetchSavedAddresses();
         setIsAddNewOpen(false);
         setIsEditing(false);
         setEditingId(null);
@@ -175,8 +134,7 @@ const AddressSelection = () => {
 
       if (response.ok) {
         toast.success(data.message || 'Address deleted successfully');
-        await fetchAddresses(); // Refresh the addresses list
-        // If we deleted the selected address, clear the selection
+        fetchSavedAddresses();
         if (selectedAddressId === id) {
           setSelectedAddressId('');
         }
@@ -193,30 +151,24 @@ const AddressSelection = () => {
     }
   };
 
-
-
   return (
     <div className="max-w-3xl mx-auto p-6">
-      {/* Header with toggle */}
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold">Select Delivery Address</h2>
         <button
-          onClick={() => setIsSectionOpen((prev) => !prev)}
+          onClick={() => setIsSectionOpen(prev => !prev)}
           className="text-xl font-bold px-2 text-blue-600"
         >
           {isSectionOpen ? '−' : '+'}
         </button>
       </div>
-      {/* Section that can be toggled */}
+
       {isSectionOpen && (
-
-
         <div>
           {isLoading && !isAddNewOpen && !showDeletePopup && (
             <div className="text-center py-4">Loading addresses...</div>
           )}
 
-          {/* Saved Addresses */}
           <div className="space-y-4">
             {savedAddresses.length === 0 && !isLoading ? (
               <div className="text-center py-4 text-gray-500">
@@ -226,10 +178,11 @@ const AddressSelection = () => {
               savedAddresses.map((address) => (
                 <div key={address._id} className="relative">
                   <label
-                    className={`flex items-start gap-4 border p-4 rounded-md cursor-pointer ${selectedAddressId === address._id
-                      ? 'border-blue-500 bg-blue-100'
-                      : 'border-gray-300'
-                      }`}
+                    className={`flex items-start gap-4 border p-4 rounded-md cursor-pointer ${
+                      selectedAddressId === address._id
+                        ? 'border-blue-500 bg-blue-100'
+                        : 'border-gray-300'
+                    }`}
                   >
                     <input
                       type="radio"
@@ -274,7 +227,6 @@ const AddressSelection = () => {
             )}
           </div>
 
-          {/* Add New Address Button */}
           <div className="mt-6">
             <button
               className="text-blue-600 font-medium hover:underline"
@@ -297,11 +249,9 @@ const AddressSelection = () => {
               + Add New Address
             </button>
           </div>
-
         </div>
       )}
 
-      {/* Add/Edit Address Popup */}
       {isAddNewOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-md w-full max-w-lg relative">
@@ -404,7 +354,6 @@ const AddressSelection = () => {
         </div>
       )}
 
-      {/* Delete popup */}
       {showDeletePopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
           <div className="bg-white p-6 rounded-md w-full max-w-sm relative">
