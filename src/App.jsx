@@ -58,19 +58,19 @@ function App() {
 
   return (
     <>
-  <Context.Provider value={{ fetchUserDetails, cartProductCount, fetchUserAddToCart }}>
-    <ToastContainer position='top-center' />
+      <Context.Provider value={{ fetchUserDetails, cartProductCount, fetchUserAddToCart }}>
+        <ToastContainer position='bottom-left' />
 
-    <div className="flex flex-col min-h-screen">
-      <Header />
-      <main className="flex-grow pt-16">
-        <Outlet />
-      </main>
-      <Footer />
-    </div>
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <main className="flex-grow pt-16">
+            <Outlet />
+          </main>
+          <Footer />
+        </div>
 
-  </Context.Provider>
-</>
+      </Context.Provider>
+    </>
 
   )
 }
