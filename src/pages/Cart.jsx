@@ -186,7 +186,7 @@ const Cart = () => {
       </div>
 
       <div className='flex flex-col lg:flex-row gap-10 lg:justify-between p-4'>
-        <div className='w-full max-w-3xl overflow-y-scroll md:h-[calc(100vh-190px)] h-[calc(100vh-730px)] scrollbar-none'>
+        <div className='w-full max-w-3xl overflow-y-scroll md:h-[calc(100vh-190px)] h-[calc(100vh-900px)] scrollbar-none'>
           {loading ? (
             Array(context.cartProductCount).fill(null).map((_, index) => (
               <div key={`loading-${index}`} className='w-full h-32 bg-slate-200 my-2 border border-slate-300 animate-pulse rounded'></div>

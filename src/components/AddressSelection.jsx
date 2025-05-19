@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import summaryApi from '../common';
+import { FaRegEdit } from "react-icons/fa";
+import { MdDeleteOutline } from "react-icons/md";
+import { IoClose } from 'react-icons/io5';
 
 const AddressSelection = ({
   savedAddresses,
@@ -152,9 +155,9 @@ const AddressSelection = ({
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-6">
+    <div className="max-w-3xl mx-auto p-2 ">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold">Select Delivery Address</h2>
+        <h2 className="text-lg font-semibold text-gray-700">Select Delivery Address</h2>
         <button
           onClick={() => setIsSectionOpen(prev => !prev)}
           className="text-xl font-bold px-2 text-blue-600"
@@ -178,11 +181,10 @@ const AddressSelection = ({
               savedAddresses.map((address) => (
                 <div key={address._id} className="relative">
                   <label
-                    className={`flex items-start gap-4 border p-4 rounded-md cursor-pointer ${
-                      selectedAddressId === address._id
-                        ? 'border-blue-500 bg-blue-100'
-                        : 'border-gray-300'
-                    }`}
+                    className={`flex items-start gap-4 border p-2  md:h-[calc(100vh-560px)] overflow-y-scroll scrollbar-none h-[calc(100vh-1000px)]  rounded-md cursor-pointer ${selectedAddressId === address._id
+                      ? 'border-blue-500 bg-blue-100'
+                      : 'border-gray-300'
+                      }`}
                   >
                     <input
                       type="radio"
@@ -192,7 +194,7 @@ const AddressSelection = ({
                       onChange={() => setSelectedAddressId(address._id)}
                       className="mt-1"
                     />
-                    <div>
+                    <div className='text-sm'>
                       <p className="font-semibold">{address.name}</p>
                       <p>{address.address}, {address.city}, {address.state} - {address.pincode}</p>
                       <p>Phone: {address.phone}</p>
@@ -202,24 +204,24 @@ const AddressSelection = ({
                   </label>
 
                   {selectedAddressId === address._id && (
-                    <div>
-                      <button
-                        className="absolute top-2 right-8 text-blue-600 hover:text-blue-800"
+                    <div className=''>
+                      <FaRegEdit
+                        className="absolute bottom-5 right-10 text-green-600 text-2xl hover:text-green-800"
                         onClick={() => handleEditAddress(address)}
                         disabled={isLoading}
-                      >
-                        ✏️
-                      </button>
-                      <button
-                        className="absolute top-2 right-2 text-red-600 hover:text-red-800"
+                      />
+
+
+                      <MdDeleteOutline
+                        className="absolute bottom-5 right-2   text-red-600 text-2xl hover:text-red-800"
                         onClick={() => {
                           setAddressToDelete(address._id);
                           setShowDeletePopup(true);
                         }}
                         disabled={isLoading}
-                      >
-                        🗑️
-                      </button>
+                      />
+
+
                     </div>
                   )}
                 </div>
@@ -255,16 +257,15 @@ const AddressSelection = ({
       {isAddNewOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-md w-full max-w-lg relative">
-            <button
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+            <IoClose
+              className="absolute top-2 text-2xl right-2 text-gray-600 hover:text-gray-800"
               onClick={() => {
                 setIsAddNewOpen(false);
                 setIsEditing(false);
               }}
               disabled={isLoading}
-            >
-              ✖
-            </button>
+            />
+
 
             <h3 className="text-xl font-bold mb-4">
               {isEditing ? 'Edit Address' : 'Add New Address'}
@@ -357,13 +358,12 @@ const AddressSelection = ({
       {showDeletePopup && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/40 z-50">
           <div className="bg-white p-6 rounded-md w-full max-w-sm relative">
-            <button
-              className="absolute top-2 right-2 text-gray-600 hover:text-gray-800"
+            <IoClose
+              className="absolute top-2 text-2xl right-2 text-gray-600 hover:text-gray-800"
               onClick={() => setShowDeletePopup(false)}
               disabled={isLoading}
-            >
-              ✖
-            </button>
+            />
+
             <h3 className="text-lg font-semibold mb-4">Confirm Delete</h3>
             <p>Are you sure you want to delete this address?</p>
             <div className="flex justify-end gap-4 mt-6">

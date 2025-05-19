@@ -16,6 +16,8 @@ import Context from '../context'
 import { useContext } from 'react'
 import { useEffect } from 'react'
 import { useRef } from 'react'
+import { IoMdLogIn, IoMdLogOut } from "react-icons/io";
+
 
 const Header = () => {
 
@@ -109,7 +111,7 @@ const Header = () => {
                                 <div className='text-3xl cursor-pointer relative flex justify-center' onClick={() => setMenuDisplay(prev => !prev)}>
                                     {
                                         user?.profilePic ? (
-                                            <img src={user?.profilePic} alt={user?.name} className='w-10 h-10 rounded-full'loading="lazy" />
+                                            <img src={user?.profilePic} alt={user?.name} className='w-10 h-10 rounded-full' loading="lazy" />
                                         ) :
                                             (
                                                 <FaRegCircleUser />
@@ -166,11 +168,17 @@ const Header = () => {
                         {
                             user?._id ?
                                 (
-                                    <button onClick={handleLogout} className='px-5 py-1 rounded-full text-white bg-red-600 hover:bg-red-800 cursor-pointer'>Logout</button>
+                                    <button onClick={handleLogout} className='flex flex-row items-center gap-1 px-3 py-1 rounded-full text-md text-white bg-red-600 hover:bg-red-800 cursor-pointer'>
+                                        <IoMdLogOut className='rotate-270' />
+                                        <p>Logout</p>
+                                    </button>
                                 )
                                 :
                                 (
-                                    <Link to={"/login"} className='px-5 py-1 rounded-full text-white bg-red-600 hover:bg-red-800'>login</Link>
+                                    <Link to={"/login"} className='flex flex-row items-center gap-1  px-5 py-1 rounded-full text-white bg-red-600 hover:bg-red-800'>
+                                        <IoMdLogIn className='rotate-90' />
+                                        <p>Login</p>
+                                    </Link>
                                 )
                         }
 
