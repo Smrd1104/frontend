@@ -181,7 +181,7 @@ const AddressSelection = ({
               savedAddresses.map((address) => (
                 <div key={address._id} className="relative">
                   <label
-                    className={`flex items-start gap-4 border p-2  md:h-[calc(100vh-560px)] overflow-y-scroll scrollbar-none h-[calc(100vh-1000px)]  rounded-md cursor-pointer ${selectedAddressId === address._id
+                    className={`flex items-start gap-4 border p-2  md:h-[calc(100vh-560px)] overflow-y-scroll scrollbar-none  rounded-md cursor-pointer ${selectedAddressId === address._id
                       ? 'border-blue-500 bg-blue-100'
                       : 'border-gray-300'
                       }`}

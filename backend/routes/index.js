@@ -26,6 +26,8 @@ const orderController = require('../controller/order/order.controller')
 const allOrderController = require('../controller/order/allorder.controller')
 const passwordController = require('../controller/passwordController')
 const addressController = require('../controller/addressController')
+const { uploadMediaWithTitle } = require('../controller/mediaController')
+const { uploadMedia, getAds, getAdById, updateAd, deleteAd } = require('../controller/adController')
 
 router.post("/signup", userSignUpController)
 router.post("/signin", userSignInController)
@@ -82,22 +84,41 @@ router.post('/reset-password', passwordController.resetPassword);
 
 
 // Get all addresses
-router.get('/addresses',authToken, addressController.getAllAddresses);
+router.get('/addresses', authToken, addressController.getAllAddresses);
 
 // Get a specific address by ID
-router.get('/addresses/:id',authToken, addressController.getAddressById);
+router.get('/addresses/:id', authToken, addressController.getAddressById);
 
 // Add a new address
-router.post('/addresses', authToken,addressController.addAddress);
+router.post('/addresses', authToken, addressController.addAddress);
 
 // Update an address
-router.put('/addresses/:id',authToken, addressController.updateAddress);
+router.put('/addresses/:id', authToken, addressController.updateAddress);
 
 // Delete an address
-router.delete('/addresses/:id',authToken, addressController.deleteAddress);
+router.delete('/addresses/:id', authToken, addressController.deleteAddress);
 
 
-console.log("Address routes loaded:",authToken, addressController);
+console.log("Address routes loaded:", authToken, addressController);
+
+
+
+// upload ad image
+router.post('/media/upload', uploadMediaWithTitle);
+
+
+// Upload media data (title + media URLs)
+router.post('/ad/upload-media', uploadMedia);
+
+// Get all ads
+router.get('/ad/get-ads', getAds);
+
+router.get('/ad/:id', getAdById);
+
+router.put('/ad/upload-media/:id', updateAd);
+
+router.delete('/ad/:id', deleteAd);
+
 
 
 

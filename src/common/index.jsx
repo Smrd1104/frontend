@@ -96,7 +96,7 @@ const summaryApi = {
         url: `${backendDomain}/api/all-order`,
         method: "GET"
     },
-   
+
     // Add these new endpoints
     forgotPassword: {
         url: `${backendDomain}/api/forgot-password`,
@@ -112,36 +112,58 @@ const summaryApi = {
     },
 
 
-        // Get all addresses
-        getAllAddresses: {
-            url: `${backendDomain}/api/addresses`,
-            method: "GET"
-        },
-        
-        // Get a specific address by ID
-        getAddressById: (id) => ({
-            url: `${backendDomain}/api/addresses/${id}`,
-            method: "GET"
-        }),
-    
-        // Add a new address
-        addAddress: {
-            url: `${backendDomain}/api/addresses`,
-            method: "POST"
-        },
-    
-        // Update an address
-        updateAddress: (id) => ({
-            url: `${backendDomain}/api/addresses/${id}`,
-            method: "PUT"
-        }),
-    
-        // Delete an address
-        deleteAddress: (id) => ({
-            url: `${backendDomain}/api/addresses/${id}`,
-            method: "DELETE"
-        })
-    
+    // Get all addresses
+    getAllAddresses: {
+        url: `${backendDomain}/api/addresses`,
+        method: "GET"
+    },
+
+    // Get a specific address by ID
+    getAddressById: (id) => ({
+        url: `${backendDomain}/api/addresses/${id}`,
+        method: "GET"
+    }),
+
+    // Add a new address
+    addAddress: {
+        url: `${backendDomain}/api/addresses`,
+        method: "POST"
+    },
+
+    // Update an address
+    updateAddress: (id) => ({
+        url: `${backendDomain}/api/addresses/${id}`,
+        method: "PUT"
+    }),
+
+    // Delete an address
+    deleteAddress: (id) => ({
+        url: `${backendDomain}/api/addresses/${id}`,
+        method: "DELETE"
+    }),
+
+    // media upload
+    uploadMedia: {
+        url: `${backendDomain}/api/media/upload`,
+        method: "POST"
+    },
+    adMedia: {
+        url: `${backendDomain}/api/ad/upload-media`,
+        method: "POST"
+    },
+    ad: {
+        url: `${backendDomain}/api/ad/get-ads`,
+        method: "GET"
+    },
+    updateAd: (id) => ({
+        url: `${backendDomain}/api/ad/upload-media/${id}`,
+        method: 'PUT'
+    }),
+    deleteAd: (id) => ({
+        url: `${backendDomain}/api/ad/${id}`,
+        method: 'DELETE'
+    })
+
 
 
 

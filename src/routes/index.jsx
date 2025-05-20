@@ -17,6 +17,9 @@ import AllOrders from "../pages/AllOrders";
 import ForgotPassword from "../pages/ForgotPassword"
 import ResetPassword from "../pages/ResetPassword";
 import VerifyOtp from "../pages/VerifyOtp";
+import Test from '../pages/Test'
+import Ad from "../pages/Ad";
+import UploadAds from "../pages/UploadAds"
 const router = createBrowserRouter([
     {
         path: '/',
@@ -78,6 +81,14 @@ const router = createBrowserRouter([
                 path: "verify-otp",
                 element: <VerifyOtp />
             },
+            {
+                path: "test",
+                element: <Test />
+            },
+            {
+                path: "ad",
+                element: <Ad />
+            },
 
 
             {
@@ -95,6 +106,10 @@ const router = createBrowserRouter([
                     {
                         path: "all-orders",
                         element: <AllOrders />
+                    },
+                    {
+                        path: "all-ads",
+                        element: <UploadAds />
                     }
                 ]
             },

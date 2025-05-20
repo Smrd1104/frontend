@@ -3,13 +3,17 @@ import CategoryList from '../components/CategoryList'
 import BannerProduct from '../components/BannerProduct'
 import HorizontalCardProduct from '../components/HorizontalCardProduct'
 import VerticalCardProduct from '../components/VerticalCardProduct'
-import Advertisement from '../components/Advertisement'
+import Ad from '../pages/Ad'
+import UploadAdvertisement from '../components/UploadAdvertisement'
 
 const Home = () => {
     return (
         <div>
             <CategoryList />
             <BannerProduct />
+
+
+
 
             <HorizontalCardProduct category={"airpods"} heading={"Top's Airpods"} />
 
@@ -22,7 +26,7 @@ const Home = () => {
 
             <VerticalCardProduct category={"mouse"} heading={"Accessories hardwares & Mouse"} />
             <div className='md:grid md:grid-cols-2 p-2 gap-5 items-center '>
-                <Advertisement className="lg:block hidden" />
+                <Ad className="lg:block hidden" />
                 <VerticalCardProduct category={"printers"} heading={"Accessories hardwares & printers"} />
 
             </div>
@@ -30,7 +34,7 @@ const Home = () => {
 
             <div className='md:grid md:grid-cols-2 p-2 gap-5 items-center '>
                 <VerticalCardProduct category={"processor"} heading={"Computer & Laptop processor"} />
-                <Advertisement className="lg:block hidden" />
+                <Ad className="lg:block hidden" />
             </div>
             <VerticalCardProduct category={"refrigerator"} heading={"Home Appliances & Refrigerator"} />
             <HorizontalCardProduct category={"mobiles"} heading={"Top's mobiles"} />
@@ -45,7 +49,6 @@ const Home = () => {
 
             <VerticalCardProduct category={"trimmers"} heading={"Shaving & trimmers"} />
             <VerticalCardProduct category={"watches"} heading={"Wrist Watches"} />
-
 
         </div>
     )

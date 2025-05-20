@@ -22,7 +22,7 @@ const AdminPanel = () => {
           <div className='text-4xl cursor-pointer relative flex justify-center mt-5' onClick={() => setMenuDisplay(prev => !prev)}>
             {
               user?.profilePic ? (
-                <img src={user?.profilePic} alt={user?.name} className='w-20 h-20 rounded-full' loading="lazy"/>
+                <img src={user?.profilePic} alt={user?.name} className='w-20 h-20 rounded-full' loading="lazy" />
               ) :
                 (
                   <FaRegCircleUser />
@@ -40,6 +40,8 @@ const AdminPanel = () => {
             <Link to={"all-users"} className="px-2 py-1 hover:bg-slate-100">All Users</Link>
             <Link to={"all-products"} className="px-2 py-1 hover:bg-slate-100">All Products</Link>
             <Link to={"all-orders"} className="px-2 py-1 hover:bg-slate-100">All Orders</Link>
+            <Link to={"all-ads"} className="px-2 py-1 hover:bg-slate-100">All Ads</Link>
+
 
 
           </nav>
