@@ -206,14 +206,14 @@ const AddressSelection = ({
                   {selectedAddressId === address._id && (
                     <div className=''>
                       <FaRegEdit
-                        className="absolute bottom-5 right-10 text-green-600 text-2xl hover:text-green-800"
+                        className="absolute md:top-5 md:right-10 right-2 top-2 text-green-600 text-2xl hover:text-green-800"
                         onClick={() => handleEditAddress(address)}
                         disabled={isLoading}
                       />
 
 
                       <MdDeleteOutline
-                        className="absolute bottom-5 right-2   text-red-600 text-2xl hover:text-red-800"
+                        className="absolute md:top-5 md:right-2  right-2 bottom-2  text-red-600 md:text-2xl text-3xl hover:text-red-800"
                         onClick={() => {
                           setAddressToDelete(address._id);
                           setShowDeletePopup(true);

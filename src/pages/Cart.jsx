@@ -173,9 +173,17 @@ const Cart = () => {
       setLoading(false);
     }
   };
+  const shippingFee = 50.00;
 
-  const totalQty = data.reduce((total, item) => total + item.quantity, 0);
-  const totalPrice = data.reduce((total, item) => total + (item.quantity * item.productId.sellingPrice), 0);
+  const totalQty = data.reduce((total, item) => total + (item.quantity || 0), 0);
+
+  const subtotal = data.reduce(
+    (total, item) => total + (item.quantity || 0) * (item.productId?.sellingPrice || 0),
+    0
+  );
+
+  const totalPrice = subtotal + shippingFee;
+
 
   return (
     <div className='container mx-auto p-4'>
@@ -186,7 +194,7 @@ const Cart = () => {
       </div>
 
       <div className='flex flex-col lg:flex-row gap-10 lg:justify-between p-4'>
-        <div className='w-full max-w-3xl overflow-y-scroll scrollbar-none  md:h-[calc(100vh-190px)] h-[calc(100vh-700px)] '>
+        <div className='w-full max-w-3xl overflow-y-scroll scrollbar-none  md:h-[calc(100vh-190px)] h-[calc(100vh-650px)] '>
           {loading ? (
             Array(context.cartProductCount).fill(null).map((_, index) => (
               <div key={`loading-${index}`} className='w-full h-32 bg-slate-200 my-2 border border-slate-300 animate-pulse rounded'></div>
@@ -259,9 +267,15 @@ const Cart = () => {
               <div className='border-t border-gray-200 px-4 py-3'>
                 <h3 className='text-lg font-semibold text-gray-700 mb-3'>Order Summary</h3>
                 <div className='space-y-2'>
-                  <div className='flex justify-between'>
-                    <span className='text-gray-600'>Subtotal ({totalQty} items)</span>
-                    <span className='font-medium'>{displayINRCurrency(totalPrice)}</span>
+                  <div className='flex flex-col justify-between'>
+                    <div className='flex justify-between'>
+                      <span className='text-gray-600'>Subtotal ({totalQty} items)</span>
+                      <span className='font-medium'>{displayINRCurrency(subtotal)}</span>
+                    </div>
+                    <div className='flex justify-between'>
+                      <span className='text-gray-600'>Shipping Fee </span>
+                      <span className='font-medium '>{displayINRCurrency(shippingFee)} </span>
+                    </div>
                   </div>
                   <div className='border-t border-gray-200 pt-2 mt-2'>
                     <div className='flex justify-between font-bold'>

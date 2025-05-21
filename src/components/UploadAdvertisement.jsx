@@ -6,6 +6,7 @@ import uploadImage from '../helpers/uploadImage';
 import DisplayImage from './DisplayImage';
 import Advertisement from './Advertisement';
 import summaryApi from '../common';
+import { toast } from 'react-toastify';
 
 const UploadMediaWithTitle = ({ onClose, onUploadSuccess, editData }) => {
     const [data, setData] = useState({ title: "", media: [] });
@@ -42,6 +43,8 @@ const UploadMediaWithTitle = ({ onClose, onUploadSuccess, editData }) => {
                     url: uploadImageCloudinary.url
                 }]
             }));
+
+
         } catch (error) {
             console.error('Error uploading media:', error);
             alert('Failed to upload media. Please try again.');
@@ -89,12 +92,15 @@ const UploadMediaWithTitle = ({ onClose, onUploadSuccess, editData }) => {
             const result = await response.json();
 
             if (!response.ok) {
+
                 throw new Error(result.message || 'Request failed');
             }
 
             console.log(editData ? 'Update success:' : 'Upload success:', result);
             if (typeof onUploadSuccess === "function") onUploadSuccess();
             if (typeof onClose === "function") onClose();
+
+            toast.success('Ad created successfully')
 
         } catch (error) {
             console.error('Request error:', error);

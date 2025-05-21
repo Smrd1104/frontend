@@ -59,6 +59,17 @@ const productCategory = [
         label: "Watches",
         value: "watches"
     },
+    // {
+    //     id: 13,
+    //     label: "Mehndi",
+    //     value: "mehndi"
+    // },
+    // {
+    //     id: 14,
+    //     label: "Saree",
+    //     value: "saree"
+    // }
+
 
 ]
 

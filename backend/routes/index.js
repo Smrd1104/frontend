@@ -28,6 +28,7 @@ const passwordController = require('../controller/passwordController')
 const addressController = require('../controller/addressController')
 const { uploadMediaWithTitle } = require('../controller/mediaController')
 const { uploadMedia, getAds, getAdById, updateAd, deleteAd } = require('../controller/adController')
+const deleteProductController = require('../controller/product/deleteProductController')
 
 router.post("/signup", userSignUpController)
 router.post("/signin", userSignInController)
@@ -51,6 +52,8 @@ router.post("/category-product", getCategoryWiseProduct)
 router.post("/product-details", getProductDetails)
 router.get("/search", searchProduct)
 router.post("/filter-product", filterProduct)
+router.delete("/product/delete-product", deleteProductController);
+
 
 
 

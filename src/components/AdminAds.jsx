@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MdModeEditOutline, MdDelete } from 'react-icons/md';
 import UploadMediaWithTitle from './UploadAdvertisement';
 import summaryApi from '../common';
+import { toast } from 'react-toastify';
 
 const AdminAds = ({ data, fetchData }) => {
     const [editAds, setEditAds] = useState(false);
@@ -17,6 +18,8 @@ const AdminAds = ({ data, fetchData }) => {
 
             if (response.ok) {
                 fetchData(); // ✅ Refresh the ad list
+                toast.success('Ad deleted successfully')
+
             } else {
                 console.error('Failed to delete ad:', result.error);
                 alert(result.error || 'Failed to delete ad');

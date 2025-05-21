@@ -22,8 +22,8 @@ const CategoryList = () => {
         fetchCategoryProduct()
     }, [])
     return (
-        <div className='container mx-auto p-4'>
-            <div className='flex items-center bg-white p-4 rounded gap-4 justify-between  overflow-scroll scrollbar-none'>
+        <div className='container mx-auto p-2'>
+            <div className='flex items-center bg-white p-2 rounded gap-4 justify-between  overflow-scroll scrollbar-none'>
                 {
                     loading ? (
 
