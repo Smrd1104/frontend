@@ -22,7 +22,7 @@ const CategoryList = () => {
         fetchCategoryProduct()
     }, [])
     return (
-        <div className='container mx-auto p-2'>
+        <div className='container mx-auto p-2 md:mt-0 mt-14 '>
             <div className='flex items-center bg-white p-2 rounded gap-4 justify-between  overflow-scroll scrollbar-none'>
                 {
                     loading ? (

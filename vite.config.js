@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [tailwindcss(), react()],
   optimizeDeps: {
-    include: ['country-state-city'],
+    include: ['country-state-city', 'use-debounce'],
+
   },
 })

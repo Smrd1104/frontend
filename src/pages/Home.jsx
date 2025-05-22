@@ -5,10 +5,12 @@ import HorizontalCardProduct from '../components/HorizontalCardProduct'
 import VerticalCardProduct from '../components/VerticalCardProduct'
 import Ad from '../pages/Ad'
 import UploadAdvertisement from '../components/UploadAdvertisement'
+import SearchNavbarMobile from '../components/SearchNavbarMobile'
 
 const Home = () => {
     return (
         <div>
+            <SearchNavbarMobile />
             <CategoryList />
             <BannerProduct />
 
