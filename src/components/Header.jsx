@@ -167,7 +167,6 @@ const Header = () => {
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (menuRef.current && !menuRef.current.contains(event.target)) {
-                console.log('Clicked outside. Closing menu and dropdown.');
                 setMenuDisplay(false);
                 setShowDropdown(false);
             }

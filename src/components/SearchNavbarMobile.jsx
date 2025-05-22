@@ -90,7 +90,7 @@ const SearchNavbarMobile = () => {
 
     return (
         <div className='w-full fixed top-16  z-40'>
-            <div ref={menuRef} className="relative mx-1 ">
+            <div ref={menuRef} className="relative mx-auto ">
                 <div className="relative  bg-white block md:hidden items-center py-3 px-2 w-full max-w-lg border border-gray-400 rounded focus-within:border-red-500 focus-within:shadow-md">
                     <input
                         type="text"

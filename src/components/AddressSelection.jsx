@@ -181,7 +181,7 @@ const AddressSelection = ({
               savedAddresses.map((address) => (
                 <div key={address._id} className="relative">
                   <label
-                    className={`flex items-start gap-4 border p-2  md:h-[calc(100vh-560px)] overflow-y-scroll scrollbar-none  rounded-md cursor-pointer ${selectedAddressId === address._id
+                    className={`flex items-start gap-4 border p-2   rounded-md cursor-pointer ${selectedAddressId === address._id
                       ? 'border-blue-500 bg-blue-100'
                       : 'border-gray-300'
                       }`}
@@ -206,14 +206,14 @@ const AddressSelection = ({
                   {selectedAddressId === address._id && (
                     <div className=''>
                       <FaRegEdit
-                        className="absolute md:top-5 md:right-10 right-2 top-2 text-green-600 text-2xl hover:text-green-800"
+                        className="absolute md:top-2 md:right-2 right-1 top-2 text-green-600 text-2xl hover:text-green-800"
                         onClick={() => handleEditAddress(address)}
                         disabled={isLoading}
                       />
 
 
                       <MdDeleteOutline
-                        className="absolute md:top-5 md:right-2  right-2 bottom-2  text-red-600 md:text-2xl text-3xl hover:text-red-800"
+                        className="absolute md:bottom-2 md:right-2  right-1 bottom-2  text-red-600 md:text-2xl text-3xl hover:text-red-800"
                         onClick={() => {
                           setAddressToDelete(address._id);
                           setShowDeletePopup(true);
