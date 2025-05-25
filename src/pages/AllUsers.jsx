@@ -4,12 +4,17 @@ import { useState } from 'react'
 import summaryApi from '../common';
 import { toast } from 'react-toastify';
 import moment from "moment"
-import { MdModeEdit } from 'react-icons/md';
+import { MdDelete, MdModeEdit } from 'react-icons/md';
 import ChangeUserRole from '../components/ChangeUserRole';
+import DeleteUserPopup from '../components/DeleteUserPopup';
 
 const AllUsers = () => {
 
     const [allUsers, setAllUsers] = useState([]);
+
+    const [openDeletePopup, setOpenDeletePopup] = useState(false);
+    const [selectedUserForDelete, setSelectedUserForDelete] = useState(null);
+
 
     const [openUpdateRole, setOpenUpdateRole] = useState(false);
 
@@ -39,6 +44,36 @@ const AllUsers = () => {
 
         // console.log(dataResponse)
     }
+
+
+    const handleDeleteUser = async (userId) => {
+        try {
+            const { url, method } = summaryApi.deleteUser(userId); // Ensure deleteUser returns { url, method }
+
+
+            const response = await fetch(url, {
+                method,
+                credentials: "include", // optional: include if your server uses cookies
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                fetchAllUsers(); // refresh user list
+                toast.success('User deleted successfully');
+            } else {
+
+                toast.error(result.message || 'Failed to delete user');
+            }
+        } catch (error) {
+
+            toast.error('Something went wrong while deleting the user.');
+        } finally {
+            setOpenDeletePopup(false);
+            setSelectedUserForDelete(null);
+        }
+    };
+
 
     useEffect(() => {
         fetchAllUsers()
@@ -74,6 +109,13 @@ const AllUsers = () => {
                                     }}>
                                         <MdModeEdit />
                                     </button>
+
+                                    <button className='bg-green-100 p-2 rounded-full cursor-pointer hover:bg-green-500 hover:text-white' onClick={() => {
+                                        setOpenDeletePopup(true);
+                                        setSelectedUserForDelete(el)
+                                    }}>
+                                        <MdDelete />
+                                    </button>
                                 </td>
 
 
@@ -99,6 +141,14 @@ const AllUsers = () => {
                     />
                 )
             }
+
+            {openDeletePopup && selectedUserForDelete && (
+                <DeleteUserPopup
+                    onClose={() => setOpenDeletePopup(false)}
+                    onConfirm={() => handleDeleteUser(selectedUserForDelete._id)}
+                    name={selectedUserForDelete.name}
+                />
+            )}
 
         </div>
     )

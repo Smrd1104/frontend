@@ -29,6 +29,7 @@ const addressController = require('../controller/addressController')
 const { uploadMediaWithTitle } = require('../controller/mediaController')
 const { uploadMedia, getAds, getAdById, updateAd, deleteAd } = require('../controller/adController')
 const deleteProductController = require('../controller/product/deleteProductController')
+const deleteUser = require('../controller/user/deleteUser')
 
 router.post("/signup", userSignUpController)
 router.post("/signin", userSignInController)
@@ -53,6 +54,7 @@ router.post("/product-details", getProductDetails)
 router.get("/search", searchProduct)
 router.post("/filter-product", filterProduct)
 router.delete("/product/delete-product", deleteProductController);
+router.delete("/user/:id", deleteUser);
 
 
 
@@ -64,6 +66,7 @@ router.get("/countAddToCartProduct", authToken, countAddToCartProduct)
 router.get("/view-cart-product", authToken, addToCartViewProduct)
 router.post("/update-cart-product", authToken, updateToCartProduct)
 router.post("/delete-cart-product", authToken, deleteAddToCartProduct)
+
 
 
 // payment and order

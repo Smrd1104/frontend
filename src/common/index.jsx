@@ -31,6 +31,12 @@ const summaryApi = {
         method: "POST"
 
     },
+    deleteUser: (id) => ({
+        url: `${backendDomain}/api/user/${id}`,
+        method: "DELETE",
+    }),
+
+
     uploadProduct: {
         url: `${backendDomain}/api/upload-product`,
         method: "POST"
