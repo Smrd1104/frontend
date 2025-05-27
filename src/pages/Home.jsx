@@ -27,14 +27,14 @@ const Home = () => {
             <HorizontalCardProduct category={"earphones"} heading={"Top's Earphones"} />
 
             <VerticalCardProduct category={"mouse"} heading={"Accessories hardwares & Mouse"} />
-            <div className='md:grid md:grid-cols-2 p-2 gap-5 items-center mx-auto container '>
+            <div className='md:grid md:grid-cols-[300px_1fr] p-2 gap-5 items-center mx-auto container '>
                 <Ad className="lg:block hidden" />
                 <VerticalCardProduct category={"printers"} heading={"Accessories hardwares & printers"} />
 
             </div>
             <HorizontalCardProduct category={"camera"} heading={"Top's cameras"} />
 
-            <div className='md:grid md:grid-cols-2 p-2 gap-5 items-center mx-auto container '>
+            <div className='md:grid md:grid-cols-[1000px_1fr] p-2 gap-5 items-center mx-auto container '>
                 <VerticalCardProduct category={"processor"} heading={"Computer & Laptop processor"} />
                 <Ad className="lg:block hidden" />
             </div>
