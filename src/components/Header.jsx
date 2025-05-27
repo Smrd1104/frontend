@@ -264,7 +264,7 @@ const Header = () => {
 
                 {/* Search section */}
                 {/* Search section desktop*/}
-                <div className="relative md:block hidden lg:flex items-center w-full max-w-lg py-1 border border-gray-400 rounded focus-within:border-red-500 focus-within:shadow-md">
+                <div className="relative md:block hidden container mx-auto lg:flex items-center w-full lg:max-w-lg md:max-w-[350px] py-1 border border-gray-400 rounded focus-within:border-red-500 focus-within:shadow-md">
                     <input
                         type="text"
                         placeholder="Search products here..."
@@ -278,7 +278,7 @@ const Header = () => {
                         }}
                     />
 
-                    <div className="text-lg min-w-[50px] text-red-500 h-8 flex items-center justify-center">
+                    <div className="text-lg min-w-[50px] text-red-500 h-8 flex items-center lg:justify-center md:justify-end lg:mt-0 md:-mt-7 lg:mx-0 md:mx-2">
                         <GrSearch />
                     </div>
 
