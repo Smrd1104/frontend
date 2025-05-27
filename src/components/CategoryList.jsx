@@ -29,9 +29,15 @@ const CategoryList = () => {
 
                         categoryLoading.map((el, index) => {
                             return (
-                                <div key={"categoryLoading" + index} className='h-16 w-16 md:h-20 rounded-full overflow-hidden bg-slate-200 animate-pulse'>
+                                <div className='flex flex-col gap-1 '>
+                                    <div key={"categoryLoading" + index} className='h-16 w-16 md:p-11 p-8 md:h-20 rounded-full overflow-hidden bg-slate-200 animate-pulse'>
+
+                                    </div>
+                                    <p className='text-center text-sm md:text-base capitalize bg-slate-200 animate-pulse p-2'></p>
+
 
                                 </div>
+
                             )
                         })
 
