@@ -3,6 +3,7 @@ import scrollTop from '../helpers/scrollTop'
 import Context from '../context'
 import { Link } from 'react-router-dom'
 import displayINRCurrency from '../helpers/displayCurrency'
+import addToCart from '../helpers/addToCart'
 
 const VerticalCard = ({ loading, data = [] }) => {
 
@@ -14,7 +15,8 @@ const VerticalCard = ({ loading, data = [] }) => {
     const { fetchUserAddToCart } = useContext(Context)
 
     const handleAddToCart = async (e, id) => {
-
+        e.preventDefault();     // Prevent link navigation
+        e.stopPropagation();    // Prevent bubbling
         await addToCart(e, id)
         fetchUserAddToCart()
     }
@@ -54,7 +56,7 @@ const VerticalCard = ({ loading, data = [] }) => {
                             return (
                                 <Link to={"/product/" + product?._id} key={index} className='w-full min-w-[300px] md:max-w-[280px]: md:min-w-[290px] max-w-[320px] bg-white rounded-sm shadow-md ' onClick={() => scrollTop()}>
                                     <div className='bg-slate-200 h-48 p-4 min-w-[280px] md:min-w-[145px] flex justify-center items-center'>
-                                        <img src={product?.productImage[0]} className='object-scale-down h-full hover:scale-110 transition-all mix-blend-multiply'loading="lazy" />
+                                        <img src={product?.productImage[0]} className='object-scale-down h-full hover:scale-110 transition-all mix-blend-multiply' loading="lazy" />
                                     </div>
                                     <div className='p-4 grid gap-3'>
                                         <h2 className='font-medium text-base md:text-lg text-ellipsis line-clamp-1'>{product?.productName}</h2>

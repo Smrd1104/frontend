@@ -34,7 +34,7 @@ const AdsList = () => {
     // if (ads.length === 0) return <p>No ads found</p>;
 
     return (
-        <div className="ads-list flex flex-wrap gap-5 ">
+        <div className="ads-list flex flex-wrap gap-5 container mx-auto ">
 
             {loading ?
                 (

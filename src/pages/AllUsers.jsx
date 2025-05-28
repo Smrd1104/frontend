@@ -102,7 +102,7 @@ const AllUsers = () => {
                                 <td>{el?.email}</td>
                                 <td>{el?.role}</td>
                                 <td>{moment(el?.createdAt).format("lll")}</td>
-                                <td>
+                                <td className='flex flex-row gap-2 items-center justify-center'>
                                     <button className='bg-green-100 p-2 rounded-full cursor-pointer hover:bg-green-500 hover:text-white' onClick={() => {
                                         setUpdateUserDetails(el)
                                         setOpenUpdateRole(true)
@@ -110,7 +110,7 @@ const AllUsers = () => {
                                         <MdModeEdit />
                                     </button>
 
-                                    <button className='bg-green-100 p-2 rounded-full cursor-pointer hover:bg-green-500 hover:text-white' onClick={() => {
+                                    <button className='bg-green-100 p-2  rounded-full cursor-pointer hover:bg-green-500 hover:text-white' onClick={() => {
                                         setOpenDeletePopup(true);
                                         setSelectedUserForDelete(el)
                                     }}>

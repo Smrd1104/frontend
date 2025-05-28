@@ -1,13 +1,15 @@
-@import "tailwindcss";
+/* Place ALL imports at the top */
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital@0;1&display=swap');
+@import "tailwindcss";
 
+/* Global variables and base styles */
 :root {
     font-family: "Open Sans", sans-serif;
     font-optical-sizing: auto;
     font-weight: 400;
     font-style: normal;
-
 }
+
 
 body {
     @apply bg-slate-100

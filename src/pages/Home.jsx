@@ -6,6 +6,7 @@ import VerticalCardProduct from '../components/VerticalCardProduct'
 import Ad from '../pages/Ad'
 import UploadAdvertisement from '../components/UploadAdvertisement'
 import SearchNavbarMobile from '../components/SearchNavbarMobile'
+import ProductAd from '../components/ProductAd'
 
 const Home = () => {
     return (
@@ -13,7 +14,16 @@ const Home = () => {
             <SearchNavbarMobile />
             <CategoryList />
             <BannerProduct />
+            <div className='md:grid md:grid-cols-[1000px_1fr] container mx-auto '>
+                <div className='flex flex-col  items-center  '>
+                    <ProductAd />
+                    <ProductAd reverseOrder={true} />
 
+                </div>
+                <div className='p-2'>
+                    <Ad />
+                </div>
+            </div>
 
 
 
